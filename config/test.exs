@@ -16,3 +16,10 @@ config :nsuki_business_service, NsukiBusinessServiceWeb.Endpoint,
 
 # Print only warnings and errors during test
 config :logger, level: :warn
+
+if System.get_env("GITHUB_ACTIONS") do
+  config :nsuki_business_service, NsukiBusinessService.Repo,
+  username: "postgres",
+  password: "postgres"
+end
+
