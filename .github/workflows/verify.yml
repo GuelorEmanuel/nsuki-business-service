@@ -2,7 +2,6 @@ name: Elixir CI
 
 on:
   push:
-    branches: [ master ]
 
 jobs:
   verify:
@@ -20,11 +19,7 @@ jobs:
           POSTGRES_PASSWORD: postgres
           POSTGRES_DB: nsuki_business_service_dev
         ports: ['5432:5432']
-        options: >-
-          --health-cmd pg_isready
-          --health-interval 10s
-          --health-timeout 5s
-          --health-retries 5
+        options: --health-cmd pg_isready --health-interval 10s --health-timeout 5s --health-retries 5
 
     steps:
       - uses: actions/checkout@v2
@@ -46,7 +41,8 @@ jobs:
           key: ${{ runner.os }}-build-${{ matrix.otp }}-${{ matrix.elixir }}-${{ hashFiles(format('{0}{1}', github.workspace, '/mix.lock')) }}
 
       - name: Install deps
-        run: mix deps.get
+        run: |
+          mix deps.get
 
       - run: mix format --check-formatted
       - run: mix test
