@@ -43,7 +43,6 @@ jobs:
       - name: Install deps
         run: |
           mix deps.get
-
       - run: mix test
       
   deploy:
@@ -69,5 +68,3 @@ jobs:
             GIGALIXIR_APP: ${{ secrets.GIGALIXIR_APP }}
             SSH_PRIVATE_KEY: ${{ secrets.SSH_PRIVATE_KEY }}
             MIGRATIONS: false  # defaults to true
-
-
