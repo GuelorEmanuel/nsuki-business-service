@@ -20,7 +20,9 @@ config :nsuki_business_service, NsukiBusinessServiceWeb.Endpoint,
   debug_errors: false,
   code_reloader: true,
   check_origin: false,
-  watchers: []
+  watchers: [],
+  username: "username",
+  password: "password"
 
 # ## SSL Support
 #

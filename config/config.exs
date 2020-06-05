@@ -16,7 +16,8 @@ config :nsuki_business_service, NsukiBusinessServiceWeb.Endpoint,
   secret_key_base: "KEmYqO6ui9s+BWF5P3hP4D4FBXSOk777PcdQpNPtPP3yc6MwCXzUpJFR+Zwiz/1X",
   render_errors: [view: NsukiBusinessServiceWeb.ErrorView, accepts: ~w(json)],
   pubsub: [name: NsukiBusinessService.PubSub, adapter: Phoenix.PubSub.PG2],
-  live_view: [signing_salt: "zh75NFwx"]
+  live_view: [signing_salt: "zh75NFwx"],
+  check_origin: ["//nsuki-business-service.gigalixirapp.com", "//*.nsuki-business-service.gigalixirapp.com"]
 
 # Configures Elixir's Logger
 config :logger, :console,
