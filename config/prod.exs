@@ -12,7 +12,6 @@ use Mix.Config
 config :nsuki_business_service, NsukiBusinessServiceWeb.Endpoint,
   force_ssl: [rewrite_on: [:x_forwarded_proto]],
   url: [host: "example.com", port: 80],
-  cache_static_manifest: "priv/static/cache_manifest.json",
   version: Mix.Project.config[:version] # To bust cache during hot upgrades
 
 # Do not print debug messages in production
