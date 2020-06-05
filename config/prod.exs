@@ -12,7 +12,7 @@ use Mix.Config
 config :nsuki_business_service, NsukiBusinessServiceWeb.Endpoint,
   force_ssl: [rewrite_on: [:x_forwarded_proto]],
   url: [host: System.get_env("APP_NAME") <> ".gigalixirapp.com", port: 80],
-  version: Mix.Project.config[:version] # To bust cache during hot upgrades
+  version: Mix.Project.config[:version], # To bust cache during hot upgrades
   username: System.get_env("USERNAME"),
   password: System.get_env("PASSWORD")
 
