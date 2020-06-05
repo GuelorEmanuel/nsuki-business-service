@@ -12,9 +12,9 @@ database_url =
     """
 
 config :nsuki_business_service, NsukiBusinessService.Repo,
-  # ssl: true,
+  ssl: true,
   url: database_url,
-  pool_size: String.to_integer(System.get_env("POOL_SIZE") || "10")
+  pool_size: String.to_integer(System.get_env("POOL_SIZE") || "2") # Free tier db only allows 4 connections. Rolling deploys need pool_size*(n+1) connections where n is the number of app replicas.
 
 secret_key_base =
   System.get_env("SECRET_KEY_BASE") ||
@@ -35,7 +35,7 @@ config :nsuki_business_service, NsukiBusinessServiceWeb.Endpoint,
 # If you are doing OTP releases, you need to instruct Phoenix
 # to start each relevant endpoint:
 #
-#     config :nsuki_business_service, NsukiBusinessServiceWeb.Endpoint, server: true
+config :nsuki_business_service, NsukiBusinessServiceWeb.Endpoint, server: true
 #
 # Then you can assemble a release by calling `mix release`.
 # See `mix help release` for more information.
