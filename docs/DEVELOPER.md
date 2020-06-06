@@ -48,7 +48,7 @@ We need [docker](https://www.docker.com/) for running PostgreSQL
 
 ## Definition of done
 
-1. Definition of Done checklist for User Story
+### 1. Definition of Done checklist for User Story
 
 This is the first and the most basic level is a User Story, where we check compliance with the initial assumptions of single backlog item, which were described in it. On this stage we also control quality of written code and check if all necessary elements of our process were carried out, for example:
 
@@ -68,7 +68,7 @@ Documentation updated
 Peer Code Review performed
 
 
-2. Definition of Done checklist for Sprint
+### 2. Definition of Done checklist for Sprint
 
 The second stage is Sprint, where we check the greater part of our work. Here we can see if all the implemented features fulfill their original assumptions and if all the required conditions for the production deployment were met.
 
@@ -84,7 +84,7 @@ All bugs fixed
 Sprint marked as ready for the production deployment by the Product Owner
 
 
-3. Definition of Done checklist for Release
+### 3. Definition of Done checklist for Release
 
 Code Complete
 Environments are prepared for release
