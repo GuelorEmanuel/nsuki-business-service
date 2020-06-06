@@ -1,6 +1,6 @@
 # Nsuki Business Service (NBS)
 
-Please read the [developer.md file](https://github.com/GuelorEmanuel/nsuki-business-service/tree/master/docs/DEVELOPER.md) before running the project.
+Please read the [developer.md](https://github.com/GuelorEmanuel/nsuki-business-service/tree/master/docs/DEVELOPER.md) file before running the project.
 
 To start your Phoenix server:
 

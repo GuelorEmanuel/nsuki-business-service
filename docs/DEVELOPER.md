@@ -4,8 +4,7 @@ First of all, welcome to Nsuki Engineering Team! :raised_hands:
 
 ## Contributers
 
-If you have contributed to the repository you can be appointed as a contributers
-after submitting a change and getting it merged. Contributers are invited to manage issues, make corrections to the style guide, review pull requests, and
+Contributers are invited to manage issues, make corrections to the style guide, review pull requests, and
 merge approved changes.
 
 1. All changes must pass automatic checks and should be discussed and approved in a pull request before being merged.
@@ -45,6 +44,9 @@ asdf global elixir 1.10.3-otp-22
 ## Install Docker
 
 We need [docker](https://www.docker.com/) for running PostgreSQL
+
+## Pull Requests Naming Convention
+The pull requests name should be the same as the ticket/task name, example: [Root-01] Create documentation
 
 ## Definition of done
 
