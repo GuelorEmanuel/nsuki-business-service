@@ -41,3 +41,7 @@ Then set them as the global version:
 asdf global erlang 22.2.7
 asdf global elixir 1.10.3-otp-22
 ```
+
+## Install Docker
+
+We need [docker](https://www.docker.com/) for running PostgreSQL
