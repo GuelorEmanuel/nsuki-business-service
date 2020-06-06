@@ -12,8 +12,8 @@ merge approved changes.
 
 ## Git Commit Message
 
-The following link is our commit message convention, please [read]: https://chris.beams.io/posts/git-commit/
+The following link is our commit message convention, please [read](https://chris.beams.io/posts/git-commit/)
 
 ## The Elixir Style Guide
 
-This is the style guide that we are following for this project [elixir style guide]: https://github.com/christopheradams/elixir_style_guide
+This is the style guide that we are following for this project [elixir style guide](https://github.com/christopheradams/elixir_style_guide)

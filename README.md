@@ -1,6 +1,6 @@
 # Nsuki Business Service (NBS)
 
-Please read the [developer.md file]: https://github.com/GuelorEmanuel/nsuki-business-service/tree/master/docs/DEVELOPER.md before running the project.
+Please read the [developer.md file](https://github.com/GuelorEmanuel/nsuki-business-service/tree/master/docs/DEVELOPER.md) before running the project.
 
 To start your Phoenix server:
 
@@ -10,7 +10,7 @@ To start your Phoenix server:
 
 Now you can visit [`localhost:4000`](http://localhost:4000) from your browser.
 
-Production url: https://nsuki-business-service.gigalixirapp.com/
+[Production url](https://nsuki-business-service.gigalixirapp.com/)
 
 ## Learn more
 
