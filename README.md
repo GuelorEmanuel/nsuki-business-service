@@ -10,7 +10,7 @@ To start your Phoenix server:
 
 Now you can visit [`localhost:4000`](http://localhost:4000) from your browser.
 
-[Production url](https://nsuki-business-service.gigalixirapp.com/)
+[`Production url: https://nsuki-business-service.gigalixirapp.com/`](https://nsuki-business-service.gigalixirapp.com/)
 
 ## Learn more
 
