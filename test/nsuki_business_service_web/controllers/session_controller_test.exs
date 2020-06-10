@@ -3,6 +3,7 @@ defmodule NsukiBusinessServiceWeb.SessionControllerTest do
 
   alias Catcasts.{Repo, Credential}
 
+  # Using ueberauth for mocking out the response we get back from Google.
   @ueberauth_auth %{
     credentials: %{token: "fdsnoafhnoofh08h38h"},
     info: %{email: "queenb@example.com", first_name: "Beyonce", last_name: "Knowles"},
