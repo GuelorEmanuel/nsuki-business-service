@@ -20,8 +20,8 @@ defmodule NsukiBusinessService.Accounts.Credential do
   @doc false
   def changeset(credential, attrs) do
     credential
-    |> cast(attrs, [:email, :provider, :token, :password_hash])
-    |> validate_required([:email, :provider, :token, :password_hash])
+    |> cast(attrs, [:email, :provider, :token])
+    |> validate_required([:email, :provider, :token])
     |> unique_constraint(:email)
   end
 end
