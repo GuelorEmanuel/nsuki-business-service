@@ -13,12 +13,27 @@ defmodule NsukiBusinessServiceWeb.Router do
   end
 
   scope "/" do
-    pipe_through :admins_only  
+    pipe_through :admins_only
     live_dashboard "/dashboard"
   end
 
   scope "/api", NsukiBusinessServiceWeb do
     pipe_through :api
     resources "/users", UserController, except: [:new, :edit]
+  end
+
+  pipeline :browser do
+    plug(:accepts, ["html"])
+    plug :fetch_session
+    plug :fetch_flash
+    plug :protect_from_forgery
+    plug :put_secure_browser_headers
+  end
+
+  scope "/auth", NsukiBusinessServiceWeb do
+    pipe_through :browser
+
+    get "/:provider", SessionController, :request
+    get "/:provider/callback", SessionController, :callback
   end
 end
