@@ -20,7 +20,10 @@ defmodule NsukiBusinessService.AccountsTest do
     end
 
     test "list_users/0 returns all users" do
-      user = user_fixture()
+      user =
+        user_fixture()
+        |>  Map.put(:credential, nil)
+
       assert Accounts.list_users() == [user]
     end
 

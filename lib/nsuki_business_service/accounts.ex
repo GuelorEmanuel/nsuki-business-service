@@ -6,7 +6,7 @@ defmodule NsukiBusinessService.Accounts do
   import Ecto.Query, warn: false
   alias NsukiBusinessService.Repo
 
-  alias NsukiBusinessService.Accounts.User
+  alias NsukiBusinessService.Accounts.{User, Credential}
 
   @doc """
   Returns the list of users.
@@ -18,7 +18,9 @@ defmodule NsukiBusinessService.Accounts do
 
   """
   def list_users do
-    Repo.all(User)
+    User
+    |> Repo.all()
+    |> Repo.preload(:credential)
   end
 
   @doc """
@@ -52,6 +54,7 @@ defmodule NsukiBusinessService.Accounts do
   def create_user(attrs \\ %{}) do
     %User{}
     |> User.changeset(attrs)
+    |> Ecto.Changeset.cast_assoc(:credential, with: &Credential.changeset/2)
     |> Repo.insert()
   end
 
@@ -132,6 +135,35 @@ defmodule NsukiBusinessService.Accounts do
 
   """
   def get_credential!(id), do: Repo.get!(Credential, id)
+
+    @doc """
+   Returns a credential.
+
+  ## Examples
+
+      iex> get_credentials_by_emails([emai1, email2,..])
+      [%Credential{}, ...]
+
+      iex> get_credentials_by_emails([emai1, email2,..])
+      []
+
+  """
+  def get_credential_by_email(email) do
+    query =
+      from r in Credential,
+      where: r.email == ^email
+
+    query_result =
+      query
+      |> Repo.one()
+      |> Repo.preload(:user)
+
+    case query_result do
+      %Credential{} = credential ->
+          credential
+        nil -> nil
+      end
+  end
 
   @doc """
   Creates a credential.

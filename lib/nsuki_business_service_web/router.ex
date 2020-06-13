@@ -1,5 +1,6 @@
 defmodule NsukiBusinessServiceWeb.Router do
   use NsukiBusinessServiceWeb, :router
+  require Ueberauth
   import Plug.BasicAuth
   import Phoenix.LiveDashboard.Router
 
@@ -33,7 +34,7 @@ defmodule NsukiBusinessServiceWeb.Router do
   scope "/auth", NsukiBusinessServiceWeb do
     pipe_through :browser
 
-    get "/:provider", SessionController, :request
-    get "/:provider/callback", SessionController, :callback
+    get "/:provider", AuthController, :request
+    get "/:provider/callback", AuthController, :callback
   end
 end

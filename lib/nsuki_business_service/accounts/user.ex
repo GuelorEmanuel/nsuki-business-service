@@ -5,10 +5,13 @@ defmodule NsukiBusinessService.Accounts.User do
 
   import Ecto.Changeset
 
+  alias NsukiBusinessService.Accounts.Credential
+
   schema "users" do
     field :first_name, :string
     field :last_name, :string
     field :verified, :boolean, default: false
+    has_one :credential, Credential
 
     timestamps()
   end

@@ -1,7 +1,8 @@
-defmodule NsukiBusinessServiceWeb.SessionControllerTest do
+defmodule NsukiBusinessServiceWeb.AuthControllerTest do
   use NsukiBusinessServiceWeb.ConnCase
 
-  alias Catcasts.{Repo, Credential}
+  alias NsukiBusinessService.Repo
+  alias NsukiBusinessService.Accounts.Credential
 
   # Using ueberauth for mocking out the response we get back from Google.
   @ueberauth_auth %{
@@ -17,6 +18,6 @@ defmodule NsukiBusinessServiceWeb.SessionControllerTest do
 
     credentials = Credential |> Repo.all
     assert Enum.count(credentials) == 1
-    assert get_flash(conn, :info) == "Thank you for signing in!"
+    assert get_flash(conn, :info) == nil
   end
 end
