@@ -72,8 +72,8 @@ defmodule NsukiBusinessService.AccountsTest do
   describe "credentials" do
     alias NsukiBusinessService.Accounts.Credential
 
-    @valid_attrs %{email: "some email", password_hash: "some password_hash", provider: "some provider", token: "some token"}
-    @update_attrs %{email: "some updated email", password_hash: "some updated password_hash", provider: "some updated provider", token: "some updated token"}
+    @valid_attrs %{email: "some_email@someaddress.com", password_hash: "some password_hash", provider: "some provider", token: "some token"}
+    @update_attrs %{email: "some_updated_email@someaddress.com", password_hash: "some updated password_hash", provider: "some updated provider", token: "some updated token"}
     @invalid_attrs %{email: nil, password_hash: nil, provider: nil, token: nil}
 
     def credential_fixture(attrs \\ %{}) do
@@ -97,7 +97,7 @@ defmodule NsukiBusinessService.AccountsTest do
 
     test "create_credential/1 with valid data creates a credential" do
       assert {:ok, %Credential{} = credential} = Accounts.create_credential(@valid_attrs)
-      assert credential.email == "some email"
+      assert credential.email == "some_email@someaddress.com"
       assert (credential.password_hash == "some password_hash" || credential.password_hash == nil)
       assert credential.provider == "some provider"
       assert credential.token == "some token"
@@ -110,7 +110,7 @@ defmodule NsukiBusinessService.AccountsTest do
     test "update_credential/2 with valid data updates the credential" do
       credential = credential_fixture()
       assert {:ok, %Credential{} = credential} = Accounts.update_credential(credential, @update_attrs)
-      assert credential.email == "some updated email"
+      assert credential.email == "some_updated_email@someaddress.com"
       assert (credential.password_hash == "some updated password_hash" || credential.password_hash == nil)
       assert credential.provider == "some updated provider"
       assert credential.token == "some updated token"
