@@ -22,6 +22,8 @@ defmodule NsukiBusinessService.Accounts.Credential do
     credential
     |> cast(attrs, [:email, :provider, :token])
     |> validate_required([:email, :provider, :token])
+    |> validate_length(:email, max: 255)
+    |> validate_format(:email, ~r/\A[\w+\-.]+@[a-z\d\-.]+\.[a-z]+\z/i)
     |> unique_constraint(:email)
   end
 end
