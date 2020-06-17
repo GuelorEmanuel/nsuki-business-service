@@ -44,7 +44,8 @@ defmodule NsukiBusinessService.MixProject do
       {:distillery, "~> 2.1"},
       {:phoenix_live_dashboard, "~> 0.1"},
       {:ueberauth, "~> 0.6.3"},
-      {:ueberauth_google, "~> 0.8"}
+      {:ueberauth_google, "~> 0.8"},
+      {:guardian, "~> 2.1"}
     ]
   end
 

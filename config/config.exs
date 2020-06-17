@@ -10,6 +10,10 @@ use Mix.Config
 config :nsuki_business_service,
   ecto_repos: [NsukiBusinessService.Repo]
 
+config :nsuki_business_service, NsukiBusinessService.Guardian,
+  issuer: "my_app",
+  secret_key: System.get_env("MY_APP_SECRET_KEY") || "Secret key. You can use `mix guardian.gen.secret` to get one"
+
 # Configures the endpoint
 config :nsuki_business_service, NsukiBusinessServiceWeb.Endpoint,
   url: [host: "localhost"],
@@ -29,6 +33,7 @@ config :phoenix, :json_library, Jason
 
 # Überauth for Google auth
 config :ueberauth, Ueberauth,
+  base_path: "/api/v1/auth", # default is "/auth"
   providers: [
     google: {Ueberauth.Strategy.Google, [default_scope: "email profile plus.me"]}
   ]
