@@ -9,21 +9,6 @@ defmodule NsukiBusinessService.Accounts do
   alias NsukiBusinessService.Accounts.{User, Credential}
 
   @doc """
-  Returns the list of users.
-
-  ## Examples
-
-      iex> list_users()
-      [%User{}, ...]
-
-  """
-  def list_users do
-    User
-    |> Repo.all()
-    |> Repo.preload(:credential)
-  end
-
-  @doc """
   Gets a single user.
 
   Raises `Ecto.NoResultsError` if the User does not exist.

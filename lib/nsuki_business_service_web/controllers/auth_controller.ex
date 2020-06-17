@@ -2,6 +2,7 @@ defmodule NsukiBusinessServiceWeb.AuthController do
   use NsukiBusinessServiceWeb, :controller
 
   alias NsukiBusinessService.Accounts
+  alias NsukiBusinessService.Guardian
   plug Ueberauth
 
   require Logger
@@ -24,14 +25,15 @@ defmodule NsukiBusinessServiceWeb.AuthController do
   end
 
   defp signin(conn, params) do
-    case insert_or_update_user(params) do
-      {:ok, credential_or_user} ->
-        conn
-        |> render("callback.json", credential_or_user: credential_or_user)
+    with {:ok, credential_or_user} <- create_user_or_get_credential(params),
+         {:ok, token, _claims} <- Guardian.encode_and_sign(credential_or_user) do
+
+          conn
+          |> render("callback.json", credential_or_user: credential_or_user, nbs_token: token)
     end
   end
 
-  defp insert_or_update_user(params) do
+  defp create_user_or_get_credential(params) do
     %{"credential" => %{"email" => email}} = params
     case Accounts.get_credential_by_email(email) do
       nil ->

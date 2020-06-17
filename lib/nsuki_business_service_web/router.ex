@@ -4,6 +4,9 @@ defmodule NsukiBusinessServiceWeb.Router do
   import Plug.BasicAuth
   import Phoenix.LiveDashboard.Router
 
+  alias NsukiBusinessService.Guardian
+
+
   pipeline :api do
     plug :accepts, ["json"]
   end
@@ -13,26 +16,23 @@ defmodule NsukiBusinessServiceWeb.Router do
                       password:  "#{Application.get_env(:nsuki_business_service, NsukiBusinessServiceWeb.Endpoint)[:password]}"
   end
 
+  pipeline :jwt_authenticated do
+    plug Guardian.AuthPipeline
+  end
+
   scope "/" do
     pipe_through :admins_only
     live_dashboard "/dashboard"
   end
 
-  scope "/api", NsukiBusinessServiceWeb do
+  scope "/api/v1", NsukiBusinessServiceWeb do
+    pipe_through [:api, :jwt_authenticated]
+
+    resources "/users", UserController, except: [:new, :edit, :index, :create]
+  end
+
+  scope "/api/v1/auth", NsukiBusinessServiceWeb do
     pipe_through :api
-    resources "/users", UserController, except: [:new, :edit]
-  end
-
-  pipeline :browser do
-    plug(:accepts, ["html"])
-    plug :fetch_session
-    plug :fetch_flash
-    plug :protect_from_forgery
-    plug :put_secure_browser_headers
-  end
-
-  scope "/auth", NsukiBusinessServiceWeb do
-    pipe_through :browser
 
     get "/:provider", AuthController, :request
     get "/:provider/callback", AuthController, :callback

@@ -11,13 +11,20 @@ defmodule NsukiBusinessServiceWeb.AuthControllerTest do
     provider: :google
   }
 
+  test "redirects user to Google for authentication", %{conn: conn} do
+    conn =
+      conn
+      |> get("/api/v1/auth/google?scope=email%20profile")
+
+    assert redirected_to(conn, 302)
+  end
+
   test "creates user from Google information", %{conn: conn} do
     conn = conn
     |> assign(:ueberauth_auth, @ueberauth_auth)
-    |> get("/auth/google/callback")
+    |> get("/api/v1/auth/google/callback")
 
     credentials = Credential |> Repo.all
     assert Enum.count(credentials) == 1
-    assert get_flash(conn, :info) == nil
   end
 end
