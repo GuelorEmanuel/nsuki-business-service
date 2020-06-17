@@ -1,4 +1,4 @@
-# Contributing to the NBS(Nsuki Business Servive)
+# Contributing to the NBS(Nsuki Business Service)
 
 First of all, welcome to Nsuki Engineering Team! :raised_hands:
 
@@ -97,3 +97,8 @@ The second stage is Sprint, where we check the greater part of our work. Here we
 * OK from the team: UX designer, developer, software architect, project manager, product owner, QA, etc.
 * Check that no unintegrated work in progress has been left in any development or staging environment.
 * Check that TDD and continuous integration is verified and working
+
+
+### Our Basic Definition of Done
+
+You can find it [here](https://docs.google.com/document/d/1RZdRZd2ytN3ZZZmNTpboxP2X2agfuulIb4Jxx4k2__A/edit)
