@@ -93,19 +93,6 @@ defmodule NsukiBusinessService.Accounts do
   alias NsukiBusinessService.Accounts.Credential
 
   @doc """
-  Returns the list of credentials.
-
-  ## Examples
-
-      iex> list_credentials()
-      [%Credential{}, ...]
-
-  """
-  def list_credentials do
-    Repo.all(Credential)
-  end
-
-  @doc """
   Gets a single credential.
 
   Raises `Ecto.NoResultsError` if the Credential does not exist.

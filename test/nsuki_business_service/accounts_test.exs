@@ -77,11 +77,6 @@ defmodule NsukiBusinessService.AccountsTest do
       credential
     end
 
-    test "list_credentials/0 returns all credentials" do
-      credential = credential_fixture()
-      assert Accounts.list_credentials() == [credential]
-    end
-
     test "get_credential!/1 returns the credential with given id" do
       credential = credential_fixture()
       assert Accounts.get_credential!(credential.id) == credential
