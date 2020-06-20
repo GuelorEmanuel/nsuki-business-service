@@ -11,7 +11,7 @@ config :nsuki_business_service,
   ecto_repos: [NsukiBusinessService.Repo]
 
 config :nsuki_business_service, NsukiBusinessService.Guardian,
-  issuer: "my_app",
+  issuer: "nsuki_business_service",
   secret_key: System.get_env("MY_APP_SECRET_KEY") || "Secret key. You can use `mix guardian.gen.secret` to get one"
 
 # Configures the endpoint
