@@ -29,6 +29,7 @@ defmodule NsukiBusinessServiceWeb.Router do
     pipe_through [:api, :jwt_authenticated]
 
     resources "/users", UserController, except: [:new, :edit, :index, :create]
+    resources "/services", ServiceController
   end
 
   scope "/api/v1/auth", NsukiBusinessServiceWeb do
