@@ -5,7 +5,7 @@ defmodule NsukiBusinessServiceWeb.ServiceControllerTest do
   alias NsukiBusinessService.Services.Service
   alias NsukiBusinessService.Accounts
   alias NsukiBusinessService.Guardian
-  alias NsukiBusinessService.Accounts.User
+
 
   @create_attrs %{
     description: "some description",
