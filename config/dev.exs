@@ -24,6 +24,10 @@ config :nsuki_business_service, NsukiBusinessServiceWeb.Endpoint,
   username: "username",
   password: "password"
 
+config :ueberauth, Ueberauth.Strategy.Google.OAuth,
+  client_id: System.get_env("GOOGLE_CLIENT_ID"),
+  client_secret: System.get_env("GOOGLE_CLIENT_SECRET")
+
 # ## SSL Support
 #
 # In order to use HTTPS in development, a self-signed
