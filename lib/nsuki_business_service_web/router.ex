@@ -9,6 +9,7 @@ defmodule NsukiBusinessServiceWeb.Router do
 
   pipeline :api do
     plug :accepts, ["json"]
+    plug CORSPlug, origin: "*"
   end
 
   pipeline :admins_only do
@@ -37,5 +38,6 @@ defmodule NsukiBusinessServiceWeb.Router do
 
     get "/:provider", AuthController, :request
     get "/:provider/callback", AuthController, :callback
+    get "/get_credential/:token", AuthController, :get_user_with_jwt
   end
 end

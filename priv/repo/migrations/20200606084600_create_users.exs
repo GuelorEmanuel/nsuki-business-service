@@ -6,6 +6,7 @@ defmodule NsukiBusinessService.Repo.Migrations.CreateUsers do
       add :first_name, :string
       add :last_name, :string
       add :verified, :boolean, default: false, null: false
+      add :image, :text, null: false
 
       timestamps()
     end

@@ -20,7 +20,7 @@ defmodule NsukiBusinessService.MixProject do
   def application do
     [
       mod: {NsukiBusinessService.Application, []},
-      extra_applications: [:logger, :runtime_tools, :ueberauth_google]
+      extra_applications: [:logger, :runtime_tools, :ueberauth_google, :con_cache, :ssl]
     ]
   end
 
@@ -45,7 +45,10 @@ defmodule NsukiBusinessService.MixProject do
       {:phoenix_live_dashboard, "~> 0.1"},
       {:ueberauth, "~> 0.6.3"},
       {:ueberauth_google, "~> 0.8"},
-      {:guardian, "~> 2.1"}
+      {:guardian, "~> 2.1"},
+      {:con_cache, "~> 0.14.0"},
+      {:bamboo, "~> 1.4"},
+      {:cors_plug, "~> 2.0"}
     ]
   end
 
