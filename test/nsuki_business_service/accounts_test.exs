@@ -6,9 +6,9 @@ defmodule NsukiBusinessService.AccountsTest do
   describe "users" do
     alias NsukiBusinessService.Accounts.User
 
-    @valid_attrs %{first_name: "some first_name", last_name: "some last_name", verified: true}
-    @update_attrs %{first_name: "some updated first_name", last_name: "some updated last_name", verified: false}
-    @invalid_attrs %{first_name: nil, last_name: nil, verified: nil}
+    @valid_attrs %{first_name: "some first_name", last_name: "some last_name", verified: true, image: "some image"}
+    @update_attrs %{first_name: "some updated first_name", last_name: "some updated last_name", verified: false, image: "some updated image"}
+    @invalid_attrs %{first_name: nil, last_name: nil, verified: nil, image: nil}
 
     def user_fixture(attrs \\ %{}) do
       {:ok, user} =
@@ -29,6 +29,7 @@ defmodule NsukiBusinessService.AccountsTest do
       assert user.first_name == "some first_name"
       assert user.last_name == "some last_name"
       assert user.verified == true
+      assert user.image == "some image"
     end
 
     test "create_user/1 with invalid data returns error changeset" do
@@ -41,6 +42,7 @@ defmodule NsukiBusinessService.AccountsTest do
       assert user.first_name == "some updated first_name"
       assert user.last_name == "some updated last_name"
       assert user.verified == false
+      assert user.image == "some updated image"
     end
 
     test "update_user/2 with invalid data returns error changeset" do

@@ -8,11 +8,13 @@ defmodule NsukiBusinessServiceWeb.UserControllerTest do
   @create_attrs %{
     first_name: "some first_name",
     last_name: "some last_name",
-    verified: true
+    verified: true,
+    image: "some image"
   }
   @update_attrs %{
     first_name: "some updated first_name",
     last_name: "some updated last_name",
+    image: "some updated image",
     verified: false
   }
   @invalid_attrs %{first_name: nil, last_name: nil, verified: nil}

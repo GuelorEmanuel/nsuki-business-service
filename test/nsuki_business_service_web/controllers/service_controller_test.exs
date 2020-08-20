@@ -16,7 +16,8 @@ defmodule NsukiBusinessServiceWeb.ServiceControllerTest do
   @create_user %{
     first_name: "some first_name",
     last_name: "some last_name",
-    verified: true
+    verified: true,
+    image: "some image"
   }
 
   @update_attrs %{
