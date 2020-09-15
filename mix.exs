@@ -48,7 +48,8 @@ defmodule NsukiBusinessService.MixProject do
       {:guardian, "~> 2.1"},
       {:con_cache, "~> 0.14.0"},
       {:bamboo, "~> 1.4"},
-      {:cors_plug, "~> 2.0"}
+      {:cors_plug, "~> 2.0"},
+      {:google_api_calendar, "~> 0.17"}
     ]
   end
 

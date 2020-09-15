@@ -9,7 +9,6 @@ defmodule NsukiBusinessServiceWeb.AuthController do
   action_fallback NsukiBusinessServiceWeb.FallbackController
 
   def callback(%{assigns: %{ueberauth_auth: auth}} = conn, _params) do
-    Logger.warn("auth: #{inspect(auth.info.image)}")
     credential_params = %{
                            "token" => auth.credentials.token,
                            "email" => auth.info.email,

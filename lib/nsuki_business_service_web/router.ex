@@ -31,6 +31,7 @@ defmodule NsukiBusinessServiceWeb.Router do
 
     resources "/users", UserController, except: [:new, :edit, :index, :create]
     resources "/services", ServiceController
+    resources "/calendar", CalendarController, except: [:new, :edit, :create]
   end
 
   scope "/api/v1/auth", NsukiBusinessServiceWeb do

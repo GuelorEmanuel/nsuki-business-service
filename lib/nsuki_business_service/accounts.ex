@@ -22,8 +22,11 @@ defmodule NsukiBusinessService.Accounts do
       ** (Ecto.NoResultsError)
 
   """
-  def get_user!(id), do: Repo.get!(User, id)
-  
+  def get_user!(id) do
+    Use
+    |> Repo.get!(id)
+    |> Repo.preload(:credential)
+  end
 
    @doc """
   Gets a single user.
