@@ -2,6 +2,24 @@ defmodule NsukiBusinessService.AccountsTest do
   use NsukiBusinessService.DataCase
 
   alias NsukiBusinessService.Accounts
+  require Logger
+
+def unload_relations(obj, to_remove \\ nil) do
+    assocs =
+      if to_remove == nil,
+        do: obj.__struct__.__schema__(:associations),
+      else: Enum.filter(obj.__struct__.__schema__(:associations), &(&1 in to_remove))
+
+      Enum.reduce(assocs, obj, fn assoc, obj ->
+        assoc_meta = obj.__struct__.__schema__(:association, assoc)
+
+        Map.put(obj, assoc, %Ecto.Association.NotLoaded{
+          __field__: assoc,
+          __owner__: assoc_meta.owner,
+          __cardinality__: assoc_meta.cardinality
+        })
+      end)
+  end
 
   describe "users" do
     alias NsukiBusinessService.Accounts.User
@@ -21,7 +39,12 @@ defmodule NsukiBusinessService.AccountsTest do
 
     test "get_user!/1 returns the user with given id" do
       user = user_fixture()
-      assert Accounts.get_user!(user.id) == user
+
+      db_user =
+        Accounts.get_user!(user.id)
+        |> unload_relations()
+
+      assert db_user == user
     end
 
     test "create_user/1 with valid data creates a user" do
@@ -46,9 +69,16 @@ defmodule NsukiBusinessService.AccountsTest do
     end
 
     test "update_user/2 with invalid data returns error changeset" do
-      user = user_fixture()
+      user =
+        user_fixture()
+        |> unload_relations()
       assert {:error, %Ecto.Changeset{}} = Accounts.update_user(user, @invalid_attrs)
-      assert user == Accounts.get_user!(user.id)
+
+      db_user =
+        Accounts.get_user!(user.id)
+        |> unload_relations()
+
+      assert user == db_user
     end
 
     test "delete_user/1 deletes the user" do

@@ -23,7 +23,7 @@ defmodule NsukiBusinessService.Accounts do
 
   """
   def get_user!(id) do
-    Use
+    User
     |> Repo.get!(id)
     |> Repo.preload(:credential)
   end
