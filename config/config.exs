@@ -35,7 +35,7 @@ config :phoenix, :json_library, Jason
 config :ueberauth, Ueberauth,
   base_path: "/api/v1/auth", # default is "/auth"
   providers: [
-    google: {Ueberauth.Strategy.Google, [default_scope: "email profile plus.me"]}
+    google: {Ueberauth.Strategy.Google, [default_scope: "email profile", access_type: "offline"]}
   ]
 
 # Import environment specific config. This must remain at the bottom
