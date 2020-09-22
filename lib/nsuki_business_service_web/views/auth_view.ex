@@ -14,14 +14,22 @@ defmodule NsukiBusinessServiceWeb.AuthView do
   end
 
   def render("user.json", %{user: user}) when user == nil, do: user
-  def render("user.json", %{user: %{expires: expires, nbs_token: nbs_token, user: user}}) do
-    handle_auth(user, nbs_token, expires)
+  def render("user.json", %{user: %{nbs_refresh_token: nbs_refresh_token,
+                            refresh_exp: refresh_exp, nbs_access_token: nbs_access_token,
+                            access_exp: access_exp, user: user}}) do
+    handle_auth(user, nbs_refresh_token, refresh_exp, nbs_access_token, access_exp)
   end
+
+  def render("refresh_token.json", %{refresh_token: %{refresh_jwt: refresh_jwt, refresh_exp: refresh_exp}}), do: %{refresh_jwt: refresh_jwt, refresh_exp: refresh_exp}
+
   defp handle_auth(%User{id: id, first_name: first_name, last_name: last_name,
-                         verified: verified, image: image, credential: credential}, nbs_token, expires) do
+                         verified: verified, image: image, credential: credential},
+                         nbs_refresh_token, refresh_exp, nbs_access_token, access_exp) do
     %{
-      expires: expires,
-      token: nbs_token,
+      nbs_refresh_token: nbs_refresh_token,
+      refresh_exp: refresh_exp,
+      nbs_access_token: nbs_access_token,
+      access_exp: access_exp,
       user: %{
         id: id,
         first_name: first_name,

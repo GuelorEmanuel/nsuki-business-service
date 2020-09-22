@@ -6,8 +6,19 @@ defmodule NsukiBusinessServiceWeb.AuthControllerTest do
 
   # Using ueberauth for mocking out the response we get back from Google.
   @ueberauth_auth %{
-    credentials: %{token: "fdsnoafhnoofh08h38h"},
-    info: %{email: "queenb@example.com", first_name: "Beyonce", last_name: "Knowles", image: "Beyonce image"},
+    credentials: %{
+                    access_token: "fdsnoafhnoofh08h38h",
+                    expires_at: 3_600,
+                    refresh_token: "some refresh token",
+                    token_type: "some token type"
+                  },
+    info: %{
+             email: "queenb@example.com",
+             first_name: "Beyonce",
+             last_name: "Knowles",
+             image: "Beyonce image"
+           },
+    extra: %{raw_info: %{user: %{"email_verified" => true}}},
     provider: :google
   }
 

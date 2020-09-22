@@ -2,9 +2,8 @@ defmodule NsukiBusinessService.AccountsTest do
   use NsukiBusinessService.DataCase
 
   alias NsukiBusinessService.Accounts
-  require Logger
 
-def unload_relations(obj, to_remove \\ nil) do
+  defp unload_relations(obj, to_remove \\ nil) do
     assocs =
       if to_remove == nil,
         do: obj.__struct__.__schema__(:associations),
@@ -96,9 +95,38 @@ def unload_relations(obj, to_remove \\ nil) do
   describe "credentials" do
     alias NsukiBusinessService.Accounts.Credential
 
-    @valid_attrs %{email: "some_email@someaddress.com", password_hash: "some password_hash", provider: "some provider", token: "some token"}
-    @update_attrs %{email: "some_updated_email@someaddress.com", password_hash: "some updated password_hash", provider: "some updated provider", token: "some updated token"}
-    @invalid_attrs %{email: nil, password_hash: nil, provider: nil, token: nil}
+    @valid_attrs %{
+                    email: "some_email@someaddress.com",
+                    password_hash: "some password_hash",
+                    provider: "some provider",
+                    access_token: "some access token",
+                    expires_at:  DateTime.from_unix!(0) |> DateTime.add(3_600, :second),
+                    refresh_token: "some refresh token",
+                    email_verified: true,
+                    token_type: "some token type"
+                  }
+    @update_attrs %{
+                     email: "some_updated_email@someaddress.com",
+                     password_hash: "some updated password_hash",
+                     provider: "some updated provider",
+                     token: "some updated token",
+                     access_token: "some updated access token",
+                     expires_at: DateTime.from_unix!(0) |> DateTime.add(3_650, :second),
+                     refresh_token: "some updated refresh token",
+                     email_verified: true,
+                     token_type: "some updated token type"
+                  }
+    @invalid_attrs %{
+                       email: nil,
+                       password_hash: nil,
+                       provider: nil,
+                       token: nil,
+                       access_token: nil,
+                       expires_at: nil,
+                       refresh_token: nil,
+                       email_verified: nil,
+                       token_type: nil
+                    }
 
     def credential_fixture(attrs \\ %{}) do
       {:ok, credential} =
@@ -119,7 +147,7 @@ def unload_relations(obj, to_remove \\ nil) do
       assert credential.email == "some_email@someaddress.com"
       assert (credential.password_hash == "some password_hash" || credential.password_hash == nil)
       assert credential.provider == "some provider"
-      assert credential.token == "some token"
+      assert credential.access_token == "some access token"
     end
 
     test "create_credential/1 with invalid data returns error changeset" do
@@ -132,7 +160,7 @@ def unload_relations(obj, to_remove \\ nil) do
       assert credential.email == "some_updated_email@someaddress.com"
       assert (credential.password_hash == "some updated password_hash" || credential.password_hash == nil)
       assert credential.provider == "some updated provider"
-      assert credential.token == "some updated token"
+      assert credential.access_token == "some updated access token"
     end
 
     test "update_credential/2 with invalid data returns error changeset" do

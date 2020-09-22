@@ -32,6 +32,7 @@ defmodule NsukiBusinessServiceWeb.Router do
     resources "/users", UserController, except: [:new, :edit, :index, :create]
     resources "/services", ServiceController
     resources "/calendar", CalendarController, except: [:new, :edit, :create]
+    post "/logout", AuthController, :delete
   end
 
   scope "/api/v1/auth", NsukiBusinessServiceWeb do
@@ -40,5 +41,6 @@ defmodule NsukiBusinessServiceWeb.Router do
     get "/:provider", AuthController, :request
     get "/:provider/callback", AuthController, :callback
     get "/get_credential/:token", AuthController, :get_user_with_jwt
+    post "/refresh_token", AuthController, :refresh_current_token
   end
 end
