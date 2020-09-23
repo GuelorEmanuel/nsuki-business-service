@@ -124,9 +124,9 @@ defmodule NsukiBusinessService.ServicesTest do
   describe "prices" do
     alias NsukiBusinessService.Services.Price
 
-    @valid_attrs %{base_price: 42, deposit: 42, travelling_fee: 42}
-    @update_attrs %{base_price: 43, deposit: 43, travelling_fee: 43}
-    @invalid_attrs %{base_price: nil, deposit: nil, travelling_fee: nil}
+    @valid_attrs %{base_price: 42, deposit_amount: 42, travelling_fee: 42}
+    @update_attrs %{base_price: 43, deposit_amount: 43, travelling_fee: 43}
+    @invalid_attrs %{base_price: nil, deposit_amount: nil, travelling_fee: nil}
 
     def price_fixture(attrs \\ %{}) do
       {:ok, price} =
@@ -150,7 +150,7 @@ defmodule NsukiBusinessService.ServicesTest do
     test "create_price/1 with valid data creates a price" do
       assert {:ok, %Price{} = price} = Services.create_price(@valid_attrs)
       assert price.base_price == 42
-      assert price.deposit == 42
+      assert price.deposit_amount == 42
       assert price.travelling_fee == 42
     end
 
@@ -162,7 +162,7 @@ defmodule NsukiBusinessService.ServicesTest do
       price = price_fixture()
       assert {:ok, %Price{} = price} = Services.update_price(price, @update_attrs)
       assert price.base_price == 43
-      assert price.deposit == 43
+      assert price.deposit_amount == 43
       assert price.travelling_fee == 43
     end
 

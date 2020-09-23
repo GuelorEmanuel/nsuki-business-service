@@ -8,5 +8,6 @@ defmodule NsukiBusinessService.Repo.Migrations.CreateServicelocations do
       timestamps()
     end
 
+    create unique_index(:servicelocations, [:location])
   end
 end

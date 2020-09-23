@@ -2,8 +2,11 @@ defmodule NsukiBusinessService.Services.ServiceLocation do
   use Ecto.Schema
   import Ecto.Changeset
 
+  alias NsukiBusinessService.Services.Service
+
   schema "servicelocations" do
     field :location, :string
+    has_many :service, Service
 
     timestamps()
   end
@@ -13,5 +16,6 @@ defmodule NsukiBusinessService.Services.ServiceLocation do
     service_location
     |> cast(attrs, [:location])
     |> validate_required([:location])
+    |> unique_constraint(:location)
   end
 end
