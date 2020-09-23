@@ -7,7 +7,7 @@ defmodule NsukiBusinessServiceWeb.AuthControllerTest do
   # Using ueberauth for mocking out the response we get back from Google.
   @ueberauth_auth %{
     credentials: %{
-                    access_token: "fdsnoafhnoofh08h38h",
+                    token: "fdsnoafhnoofh08h38h",
                     expires_at: 3_600,
                     refresh_token: "some refresh token",
                     token_type: "some token type"
