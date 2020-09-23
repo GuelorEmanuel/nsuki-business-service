@@ -31,6 +31,7 @@ defmodule NsukiBusinessServiceWeb.Router do
 
     resources "/users", UserController, except: [:new, :edit, :index, :create]
     resources "/services", ServiceController
+    resources "/business", BusinessController
     resources "/calendar", CalendarController, except: [:new, :edit, :create]
     post "/logout", AuthController, :delete
   end
