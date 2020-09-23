@@ -50,7 +50,7 @@ defmodule NsukiBusinessService.UserFromAuth do
 
   defp email_from_auth(%{info: %{email: email}}), do: email
 
-  defp access_token_from_auth(%{credentials: %{access_token: access_token}}), do: access_token
+  defp access_token_from_auth(%{credentials: %{token: token}}), do: token
 
   defp expires_at_from_auth(%{credentials: %{expires_at: expires_at}}) do
     DateTime.from_unix!(0)
