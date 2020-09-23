@@ -1,5 +1,8 @@
 defmodule NsukiBusinessService.Businesses.Business do
   use Ecto.Schema
+
+  @timestamps_opts [type: :utc_datetime]
+
   import Ecto.Changeset
 
   schema "businesses" do

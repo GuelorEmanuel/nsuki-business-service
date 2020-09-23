@@ -1,5 +1,8 @@
 defmodule NsukiBusinessService.Businesses.CountryCode do
   use Ecto.Schema
+
+  @timestamps_opts [type: :utc_datetime]
+
   import Ecto.Changeset
 
   alias NsukiBusinessService.Businesses.Country
