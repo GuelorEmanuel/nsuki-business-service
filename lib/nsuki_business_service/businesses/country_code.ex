@@ -1,8 +1,8 @@
-defmodule NsukiBusinessService.Services.CountryCode do
+defmodule NsukiBusinessService.Businesses.CountryCode do
   use Ecto.Schema
   import Ecto.Changeset
 
-  alias NsukiBusinessService.Services.Country
+  alias NsukiBusinessService.Businesses.Country
 
   schema "countrycodes" do
     field :code, :integer
