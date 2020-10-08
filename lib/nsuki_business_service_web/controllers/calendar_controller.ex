@@ -18,6 +18,20 @@ defmodule NsukiBusinessServiceWeb.CalendarController do
     render(conn, "show.json", user: user)
   end
 
+  defp is_token_expired?(expires_at) do
+    utc_expires_at =
+      DateTime.from_unix!(0)
+      |> DateTime.add(expires_at, :second)
+
+    datetime = DateTime.utc_now()
+
+    case DateTime.compare(utc_expires_at, datetime) do
+      :gt -> false
+      :eq -> false
+      :lt -> true
+    end
+  end
+
   defp create_connection(google_token) do
     Logger.warn("token: #{google_token}")
     connection =

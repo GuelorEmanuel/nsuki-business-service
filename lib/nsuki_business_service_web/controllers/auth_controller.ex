@@ -22,9 +22,9 @@ defmodule NsukiBusinessServiceWeb.AuthController do
             %{
               user: user,
               nbs_refresh_token: jwt_tokens.refresh_jwt,
-              refresh_exp: jwt_tokens.refresh_exp,
+              nbs_refresh_exp: jwt_tokens.refresh_exp,
               nbs_access_token: jwt_tokens.access_jwt,
-              access_exp: jwt_tokens.access_exp
+              nbs_access_exp: jwt_tokens.access_exp
              }
          conn
          |> render("user.json", user: user_temp)
@@ -37,7 +37,7 @@ defmodule NsukiBusinessServiceWeb.AuthController do
 
   def delete(conn, _params) do
     conn
-    |> Guardian.Plug.sign_out()
+    |> Guardian.Plug.sign_out() #make sure refresh token is also revoked
     |> respond_to_sign_out()
   end
 
