@@ -14,6 +14,8 @@ defmodule NsukiBusinessService.Application do
       NsukiBusinessServiceWeb.Endpoint,
       # Starts a worker by calling: NsukiBusinessService.Worker.start_link(arg)
       # {NsukiBusinessService.Worker, arg},
+      # Start google_apis_token_holder
+      NsukiBusinessService.GoogleAPISTokenHolder,
       {ConCache,
       [
         name: :current_user_cache,
