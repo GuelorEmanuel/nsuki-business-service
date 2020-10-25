@@ -8,7 +8,8 @@
 use Mix.Config
 
 config :nsuki_business_service,
-  ecto_repos: [NsukiBusinessService.Repo]
+  ecto_repos: [NsukiBusinessService.Repo],
+  google_calendar_service: NsukiBusinessService.GoogleCalendarService
 
 config :nsuki_business_service, NsukiBusinessService.Guardian,
   issuer: "nsuki_business_service",
