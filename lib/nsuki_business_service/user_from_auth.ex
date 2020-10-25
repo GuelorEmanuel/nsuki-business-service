@@ -16,13 +16,11 @@ defmodule NsukiBusinessService.UserFromAuth do
 
   # default case if nothing matches
   defp avatar_from_auth(auth) do
-    Logger.warn("#{auth.provider} needs to find an avatar URL!")
     Logger.debug(Poison.encode!(auth))
     nil
   end
 
   defp basic_info(auth) do
-    Logger.warn("auth: #{inspect(auth)}")
     user_from_auth(auth)
   end
 
@@ -39,7 +37,7 @@ defmodule NsukiBusinessService.UserFromAuth do
   defp credential_from_auth(auth) do
     %{
       "access_token" => access_token_from_auth(auth),
-      "expires_at" => expires_at_from_auth(auth),
+      "expires_at" => convert_expires_at_from_auth(auth, false),
       "refresh_token" => refresh_token_from_auth(auth),
       "email" => email_from_auth(auth),
       "email_verified" => email_verified_from_auth(auth),
@@ -52,9 +50,13 @@ defmodule NsukiBusinessService.UserFromAuth do
 
   defp access_token_from_auth(%{credentials: %{token: token}}), do: token
 
-  defp expires_at_from_auth(%{credentials: %{expires_at: expires_at}}) do
+  defp convert_expires_at_from_auth(%{credentials: %{expires_at: expires_at}}, false) do
+    expires_at
+  end
+  defp convert_expires_at_from_auth(%{credentials: %{expires_at: expires_at}}, true) do
     DateTime.from_unix!(0)
     |> DateTime.add(expires_at, :second)
+    expires_at
   end
 
   defp refresh_token_from_auth(%{credentials: %{refresh_token: refresh_token}}), do: refresh_token
