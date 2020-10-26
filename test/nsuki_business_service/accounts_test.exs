@@ -95,12 +95,14 @@ defmodule NsukiBusinessService.AccountsTest do
   describe "credentials" do
     alias NsukiBusinessService.Accounts.Credential
 
+    @valid_user_attrs %{first_name: "some first_name", last_name: "some last_name", verified: true, image: "some image"}
+
     @valid_attrs %{
                     email: "some_email@someaddress.com",
                     password_hash: "some password_hash",
                     provider: "some provider",
                     access_token: "some access token",
-                    expires_at:  DateTime.from_unix!(0) |> DateTime.add(3_600, :second),
+                    expires_at:  1605560197,
                     refresh_token: "some refresh token",
                     email_verified: true,
                     token_type: "some token type"
@@ -111,7 +113,7 @@ defmodule NsukiBusinessService.AccountsTest do
                      provider: "some updated provider",
                      token: "some updated token",
                      access_token: "some updated access token",
-                     expires_at: DateTime.from_unix!(0) |> DateTime.add(3_650, :second),
+                     expires_at: 1605560197,
                      refresh_token: "some updated refresh token",
                      email_verified: true,
                      token_type: "some updated token type"
@@ -129,21 +131,32 @@ defmodule NsukiBusinessService.AccountsTest do
                     }
 
     def credential_fixture(attrs \\ %{}) do
+      {:ok, user} =
+        @valid_user_attrs
+        |> Accounts.create_user()
+    
       {:ok, credential} =
         attrs
         |> Enum.into(@valid_attrs)
-        |> Accounts.create_credential()
+        |> Accounts.create_credential(user)
 
       credential
     end
 
     test "get_credential!/1 returns the credential with given id" do
-      credential = credential_fixture()
+      credential = 
+        credential_fixture()
+        |> unload_relations()
+
       assert Accounts.get_credential!(credential.id) == credential
     end
 
     test "create_credential/1 with valid data creates a credential" do
-      assert {:ok, %Credential{} = credential} = Accounts.create_credential(@valid_attrs)
+      {:ok, user} =
+        @valid_user_attrs
+        |> Accounts.create_user()
+
+      assert {:ok, %Credential{} = credential} = Accounts.create_credential(@valid_attrs, user)
       assert credential.email == "some_email@someaddress.com"
       assert (credential.password_hash == "some password_hash" || credential.password_hash == nil)
       assert credential.provider == "some provider"
@@ -151,11 +164,18 @@ defmodule NsukiBusinessService.AccountsTest do
     end
 
     test "create_credential/1 with invalid data returns error changeset" do
-      assert {:error, %Ecto.Changeset{}} = Accounts.create_credential(@invalid_attrs)
+      {:ok, user} =
+        @valid_user_attrs
+        |> Accounts.create_user()
+
+      assert {:error, %Ecto.Changeset{}} = Accounts.create_credential(@invalid_attrs, user)
     end
 
     test "update_credential/2 with valid data updates the credential" do
-      credential = credential_fixture()
+      credential = 
+        credential_fixture()
+        |> unload_relations()
+
       assert {:ok, %Credential{} = credential} = Accounts.update_credential(credential, @update_attrs)
       assert credential.email == "some_updated_email@someaddress.com"
       assert (credential.password_hash == "some updated password_hash" || credential.password_hash == nil)
@@ -164,7 +184,10 @@ defmodule NsukiBusinessService.AccountsTest do
     end
 
     test "update_credential/2 with invalid data returns error changeset" do
-      credential = credential_fixture()
+      credential = 
+        credential_fixture()
+        |> unload_relations()
+
       assert {:error, %Ecto.Changeset{}} = Accounts.update_credential(credential, @invalid_attrs)
       assert credential == Accounts.get_credential!(credential.id)
     end
