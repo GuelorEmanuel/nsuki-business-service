@@ -91,7 +91,6 @@ defmodule NsukiBusinessServiceWeb.AuthController do
           ConCache.put(:current_user_cache,
                  String.to_atom(random_string),
                  %ConCache.Item{value: tokens, ttl: one_minutes_in_seconds})
-          Logger.warn("tokens: #{inspect(tokens)}")
           conn
           |> redirect(external: "http://localhost:3000/auth/google/callback?access_token=#{random_string}") #@TODO We Need to find a better way to do this
           #|> render("callback.json", credential_or_user: credential_or_user, nbs_token: token)
@@ -106,7 +105,6 @@ defmodule NsukiBusinessServiceWeb.AuthController do
   defp create_user_or_get_credential(%{"credential" => %{"email" => email}} = params) do
     case Accounts.get_credential_by_email(email) do
       nil ->
-        Logger.warn("**Created user: #{inspect(params)}")
         params
         |> Accounts.create_user()
       credential ->
