@@ -2,43 +2,24 @@ defmodule NsukiBusinessServiceWeb.CalendarController do
   use NsukiBusinessServiceWeb, :controller
 
   alias NsukiBusinessService.Accounts
-  alias NsukiBusinessService.Accounts.User
-  alias NsukiBusinessService.Accounts.Credential
-  alias GoogleApi.Calendar.V3.Connection
-  alias GoogleApi.Calendar.V3.Api.CalendarList
+  alias NsukiBusinessService.GoogleCalendarService
 
-  require Logger
+  @google_calendar_service Application.get_env(:nsuki_business_service, :google_calendar_service)
+
   action_fallback NsukiBusinessServiceWeb.FallbackController
 
   def index(conn, _params) do
-    Logger.warn("Index..")
     user = Guardian.Plug.current_resource(conn)
-    google_token = user.credential.access_token
-    connection = create_connection(google_token)
-    render(conn, "show.json", user: user)
-  end
+    google_auth = %{
+      expires_in: user.credential.expires_at,
+      refresh_token: user.credential.refresh_token,
+      access_token: user.credential.access_token
+    }
+    calendar_list =
+      user.id
+      |> @google_calendar_service.get_google_calendar_list(google_auth)
 
-  defp is_token_expired?(expires_at) do
-    utc_expires_at =
-      DateTime.from_unix!(0)
-      |> DateTime.add(expires_at, :second)
-
-    datetime = DateTime.utc_now()
-
-    case DateTime.compare(utc_expires_at, datetime) do
-      :gt -> false
-      :eq -> false
-      :lt -> true
-    end
-  end
-
-  defp create_connection(google_token) do
-    Logger.warn("token: #{google_token}")
-    connection =
-      Connection.new(google_token)
-      |> CalendarList.calendar_calendar_list_list()
-
-    Logger.warn("connection: #{inspect(connection)}")
+    render(conn, "index.json", calendar_list: calendar_list)
   end
 
   defp current_user_from_cache_or_repo(user_id) do
