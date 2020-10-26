@@ -173,9 +173,10 @@ defmodule NsukiBusinessService.Accounts do
       {:error, %Ecto.Changeset{}}
 
   """
-  def create_credential(attrs \\ %{}) do
+  def create_credential(attrs \\ %{}, user) do
     %Credential{}
     |> Credential.changeset(attrs)
+    |> Ecto.Changeset.put_assoc(:user, user)
     |> Repo.insert()
   end
 
