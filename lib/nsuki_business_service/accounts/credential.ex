@@ -12,7 +12,7 @@ defmodule NsukiBusinessService.Accounts.Credential do
     field :password_hash, :string
     field :provider, :string
     field :access_token, :string
-    field :expires_at, :utc_datetime
+    field :expires_at, :integer
     field :refresh_token, :string
     field :email_verified, :boolean
     field :token_type, :string

@@ -6,7 +6,7 @@ defmodule NsukiBusinessService.Repo.Migrations.CreateCredentials do
       add :email, :string
       add :provider, :string
       add :access_token, :string
-      add :expires_at, :utc_datetime
+      add :expires_at, :integer
       add :refresh_token, :string
       add :email_verified, :boolean
       add :token_type, :string
