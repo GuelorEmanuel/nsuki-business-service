@@ -10,6 +10,23 @@ defmodule NsukiBusinessService.ServicesTest do
     @update_attrs %{location: "some updated location"}
     @invalid_attrs %{location: nil}
 
+    defp unload_relations(obj, to_remove \\ nil) do
+      assocs =
+        if to_remove == nil,
+          do: obj.__struct__.__schema__(:associations),
+        else: Enum.filter(obj.__struct__.__schema__(:associations), &(&1 in to_remove))
+
+        Enum.reduce(assocs, obj, fn assoc, obj ->
+          assoc_meta = obj.__struct__.__schema__(:association, assoc)
+
+          Map.put(obj, assoc, %Ecto.Association.NotLoaded{
+            __field__: assoc,
+            __owner__: assoc_meta.owner,
+            __cardinality__: assoc_meta.cardinality
+          })
+        end)
+    end
+
     def service_location_fixture(attrs \\ %{}) do
       {:ok, service_location} =
         attrs
@@ -21,12 +38,20 @@ defmodule NsukiBusinessService.ServicesTest do
 
     test "list_servicelocations/0 returns all servicelocations" do
       service_location = service_location_fixture()
-      assert Services.list_servicelocations() == [service_location]
+      service_loc_temp =
+        Services.list_servicelocations()
+        |> Enum.map(&unload_relations/1)
+
+      assert service_loc_temp == [service_location]
     end
 
     test "get_service_location!/1 returns the service_location with given id" do
       service_location = service_location_fixture()
-      assert Services.get_service_location!(service_location.id) == service_location
+      service_loc_temp =
+        Services.get_service_location!(service_location.id)
+        |> unload_relations()
+
+      assert service_loc_temp == service_location
     end
 
     test "create_service_location/1 with valid data creates a service_location" do
@@ -80,7 +105,11 @@ defmodule NsukiBusinessService.ServicesTest do
 
     test "list_deposits/0 returns all deposits" do
       deposit = deposit_fixture()
-      assert Services.list_deposits() == [deposit]
+      deposit_temp =
+        Services.list_deposits()
+        |> Enum.map(&unload_relations/1)
+
+      assert deposit_temp == [deposit]
     end
 
     test "get_deposit!/1 returns the deposit with given id" do
