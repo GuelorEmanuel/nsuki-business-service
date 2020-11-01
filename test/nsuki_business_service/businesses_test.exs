@@ -63,4 +63,69 @@ defmodule NsukiBusinessService.BusinessesTest do
       assert %Ecto.Changeset{} = Businesses.change_business(business)
     end
   end
+
+  describe "addresses" do
+    alias NsukiBusinessService.Businesses.Address
+
+    @valid_attrs %{apt_no: "some apt_no", postal_code: "some postal_code", province_state: "some province_state", street_no: "some street_no"}
+    @update_attrs %{apt_no: "some updated apt_no", postal_code: "some updated postal_code", province_state: "some updated province_state", street_no: "some updated street_no"}
+    @invalid_attrs %{apt_no: nil, postal_code: nil, province_state: nil, street_no: nil}
+
+    def address_fixture(attrs \\ %{}) do
+      {:ok, address} =
+        attrs
+        |> Enum.into(@valid_attrs)
+        |> Businesses.create_address()
+
+      address
+    end
+
+    test "list_addresses/0 returns all addresses" do
+      address = address_fixture()
+      assert Businesses.list_addresses() == [address]
+    end
+
+    test "get_address!/1 returns the address with given id" do
+      address = address_fixture()
+      assert Businesses.get_address!(address.id) == address
+    end
+
+    test "create_address/1 with valid data creates a address" do
+      assert {:ok, %Address{} = address} = Businesses.create_address(@valid_attrs)
+      assert address.apt_no == "some apt_no"
+      assert address.postal_code == "some postal_code"
+      assert address.province_state == "some province_state"
+      assert address.street_no == "some street_no"
+    end
+
+    test "create_address/1 with invalid data returns error changeset" do
+      assert {:error, %Ecto.Changeset{}} = Businesses.create_address(@invalid_attrs)
+    end
+
+    test "update_address/2 with valid data updates the address" do
+      address = address_fixture()
+      assert {:ok, %Address{} = address} = Businesses.update_address(address, @update_attrs)
+      assert address.apt_no == "some updated apt_no"
+      assert address.postal_code == "some updated postal_code"
+      assert address.province_state == "some updated province_state"
+      assert address.street_no == "some updated street_no"
+    end
+
+    test "update_address/2 with invalid data returns error changeset" do
+      address = address_fixture()
+      assert {:error, %Ecto.Changeset{}} = Businesses.update_address(address, @invalid_attrs)
+      assert address == Businesses.get_address!(address.id)
+    end
+
+    test "delete_address/1 deletes the address" do
+      address = address_fixture()
+      assert {:ok, %Address{}} = Businesses.delete_address(address)
+      assert_raise Ecto.NoResultsError, fn -> Businesses.get_address!(address.id) end
+    end
+
+    test "change_address/1 returns a address changeset" do
+      address = address_fixture()
+      assert %Ecto.Changeset{} = Businesses.change_address(address)
+    end
+  end
 end
