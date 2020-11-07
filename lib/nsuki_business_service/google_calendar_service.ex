@@ -27,7 +27,7 @@ defmodule Behaviour.NsukiBusinessService.GoogleCalendarService do
     end
   end
 
-  # @TODO create default calendar if user doenst have any calendars
+  # @TODO create default calendar if user doesn't have any calendars
   defp create_default_google_calendar(connection) do
     :ok
   end
