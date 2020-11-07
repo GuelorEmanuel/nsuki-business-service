@@ -4,8 +4,6 @@ defmodule NsukiBusinessServiceWeb.UserController do
   alias NsukiBusinessService.Accounts
   alias NsukiBusinessService.Accounts.User
 
-  require Logger
-
   action_fallback NsukiBusinessServiceWeb.FallbackController
 
   def show(conn, _params) do

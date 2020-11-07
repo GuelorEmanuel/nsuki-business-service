@@ -11,9 +11,18 @@ defmodule NsukiBusinessService.Application do
       # Start the Ecto repository
       NsukiBusinessService.Repo,
       # Start the endpoint when the application starts
-      NsukiBusinessServiceWeb.Endpoint
+      NsukiBusinessServiceWeb.Endpoint,
       # Starts a worker by calling: NsukiBusinessService.Worker.start_link(arg)
       # {NsukiBusinessService.Worker, arg},
+      # Start google_apis_token_holder
+      NsukiBusinessService.GoogleAPISTokenHolder,
+      {ConCache,
+      [
+        name: :current_user_cache,
+        ttl_check_interval: 2_000,
+        global_ttl: 2_000,
+        touch_on_read: true
+      ]}
     ]
 
     # See https://hexdocs.pm/elixir/Supervisor.html

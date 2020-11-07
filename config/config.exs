@@ -8,7 +8,8 @@
 use Mix.Config
 
 config :nsuki_business_service,
-  ecto_repos: [NsukiBusinessService.Repo]
+  ecto_repos: [NsukiBusinessService.Repo],
+  google_calendar_service: NsukiBusinessService.GoogleCalendarService
 
 config :nsuki_business_service, NsukiBusinessService.Guardian,
   issuer: "nsuki_business_service",
@@ -35,7 +36,7 @@ config :phoenix, :json_library, Jason
 config :ueberauth, Ueberauth,
   base_path: "/api/v1/auth", # default is "/auth"
   providers: [
-    google: {Ueberauth.Strategy.Google, [default_scope: "email profile plus.me"]}
+    google: {Ueberauth.Strategy.Google, [default_scope: "email profile calendar", access_type: "offline"]}
   ]
 
 # Import environment specific config. This must remain at the bottom

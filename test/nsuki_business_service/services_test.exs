@@ -10,6 +10,23 @@ defmodule NsukiBusinessService.ServicesTest do
     @update_attrs %{location: "some updated location"}
     @invalid_attrs %{location: nil}
 
+    defp unload_relations(obj, to_remove \\ nil) do
+      assocs =
+        if to_remove == nil,
+          do: obj.__struct__.__schema__(:associations),
+        else: Enum.filter(obj.__struct__.__schema__(:associations), &(&1 in to_remove))
+
+        Enum.reduce(assocs, obj, fn assoc, obj ->
+          assoc_meta = obj.__struct__.__schema__(:association, assoc)
+
+          Map.put(obj, assoc, %Ecto.Association.NotLoaded{
+            __field__: assoc,
+            __owner__: assoc_meta.owner,
+            __cardinality__: assoc_meta.cardinality
+          })
+        end)
+    end
+
     def service_location_fixture(attrs \\ %{}) do
       {:ok, service_location} =
         attrs
@@ -21,12 +38,20 @@ defmodule NsukiBusinessService.ServicesTest do
 
     test "list_servicelocations/0 returns all servicelocations" do
       service_location = service_location_fixture()
-      assert Services.list_servicelocations() == [service_location]
+      service_loc_temp =
+        Services.list_servicelocations()
+        |> Enum.map(&unload_relations/1)
+
+      assert service_loc_temp == [service_location]
     end
 
     test "get_service_location!/1 returns the service_location with given id" do
       service_location = service_location_fixture()
-      assert Services.get_service_location!(service_location.id) == service_location
+      service_loc_temp =
+        Services.get_service_location!(service_location.id)
+        |> unload_relations()
+
+      assert service_loc_temp == service_location
     end
 
     test "create_service_location/1 with valid data creates a service_location" do
@@ -80,7 +105,11 @@ defmodule NsukiBusinessService.ServicesTest do
 
     test "list_deposits/0 returns all deposits" do
       deposit = deposit_fixture()
-      assert Services.list_deposits() == [deposit]
+      deposit_temp =
+        Services.list_deposits()
+        |> Enum.map(&unload_relations/1)
+
+      assert deposit_temp == [deposit]
     end
 
     test "get_deposit!/1 returns the deposit with given id" do
@@ -124,9 +153,9 @@ defmodule NsukiBusinessService.ServicesTest do
   describe "prices" do
     alias NsukiBusinessService.Services.Price
 
-    @valid_attrs %{base_price: 42, deposit: 42, travelling_fee: 42}
-    @update_attrs %{base_price: 43, deposit: 43, travelling_fee: 43}
-    @invalid_attrs %{base_price: nil, deposit: nil, travelling_fee: nil}
+    @valid_attrs %{base_price: 42, deposit_amount: 42, travelling_fee: 42}
+    @update_attrs %{base_price: 43, deposit_amount: 43, travelling_fee: 43}
+    @invalid_attrs %{base_price: nil, deposit_amount: nil, travelling_fee: nil}
 
     def price_fixture(attrs \\ %{}) do
       {:ok, price} =
@@ -150,7 +179,7 @@ defmodule NsukiBusinessService.ServicesTest do
     test "create_price/1 with valid data creates a price" do
       assert {:ok, %Price{} = price} = Services.create_price(@valid_attrs)
       assert price.base_price == 42
-      assert price.deposit == 42
+      assert price.deposit_amount == 42
       assert price.travelling_fee == 42
     end
 
@@ -162,7 +191,7 @@ defmodule NsukiBusinessService.ServicesTest do
       price = price_fixture()
       assert {:ok, %Price{} = price} = Services.update_price(price, @update_attrs)
       assert price.base_price == 43
-      assert price.deposit == 43
+      assert price.deposit_amount == 43
       assert price.travelling_fee == 43
     end
 

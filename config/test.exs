@@ -14,6 +14,9 @@ config :nsuki_business_service, NsukiBusinessServiceWeb.Endpoint,
   http: [port: 4002],
   server: false
 
+config :nsuki_business_service,
+  google_calendar_service: NsukiBusinessService.MockCalendarServiceBehaviour
+
 # Print only warnings and errors during test
 config :logger, level: :warn
 
@@ -22,4 +25,3 @@ if System.get_env("GITHUB_ACTIONS") do
   username: "postgres",
   password: "postgres"
 end
-

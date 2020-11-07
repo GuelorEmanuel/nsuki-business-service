@@ -22,7 +22,31 @@ defmodule NsukiBusinessService.Accounts do
       ** (Ecto.NoResultsError)
 
   """
-  def get_user!(id), do: Repo.get!(User, id)
+  def get_user!(id) do
+    User
+    |> Repo.get!(id)
+    |> Repo.preload(:credential)
+  end
+
+   @doc """
+  Gets a single user.
+
+  Return `nil` if the User does not exist.
+
+  ## Examples
+
+      iex> get_user!(123)
+      %User{}
+
+      iex> get_user!(456)
+      ** nil
+
+  """
+  def get_user(id) do
+    User
+    |> Repo.get(id)
+    |> Repo.preload(:credential)
+  end
 
   @doc """
   Creates a user.
@@ -149,9 +173,10 @@ defmodule NsukiBusinessService.Accounts do
       {:error, %Ecto.Changeset{}}
 
   """
-  def create_credential(attrs \\ %{}) do
+  def create_credential(attrs \\ %{}, user) do
     %Credential{}
     |> Credential.changeset(attrs)
+    |> Ecto.Changeset.put_assoc(:user, user)
     |> Repo.insert()
   end
 

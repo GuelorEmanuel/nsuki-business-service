@@ -5,7 +5,11 @@ defmodule NsukiBusinessService.Repo.Migrations.CreateCredentials do
     create table(:credentials) do
       add :email, :string
       add :provider, :string
-      add :token, :string
+      add :access_token, :string
+      add :expires_at, :integer
+      add :refresh_token, :string
+      add :email_verified, :boolean
+      add :token_type, :string
       add :password_hash, :string
       add :user_id, references(:users, on_delete: :delete_all)
 
