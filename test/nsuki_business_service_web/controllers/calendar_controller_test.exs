@@ -4,7 +4,6 @@ defmodule NsukiBusinessServiceWeb.CalendarControllerTest do
 
   alias NsukiBusinessService.Accounts
   alias NsukiBusinessService.Guardian
-  alias Behaviour.NsukiBusinessService.CalendarServiceBehaviour
   alias NsukiBusinessService.MockCalendarServiceBehaviour
 
   @create_user %{
@@ -26,11 +25,11 @@ defmodule NsukiBusinessServiceWeb.CalendarControllerTest do
 
   setup %{conn: conn} do
     {:ok, user} = Accounts.create_user(@create_user)
-    {:ok, credential} = Accounts.create_credential(@create_credential, user)
+    {:ok, _credential} = Accounts.create_credential(@create_credential, user)
     {:ok, jwt, _claims} = Guardian.encode_and_sign(user)
 
     conn =
-      Phoenix.ConnTest.build_conn()
+      conn
       |> put_req_header("accept", "application/json")
       |> put_req_header("authorization", "Bearer #{jwt}")
 
@@ -39,7 +38,7 @@ defmodule NsukiBusinessServiceWeb.CalendarControllerTest do
 
   describe "index" do
     test "lists all google calendar", %{conn: conn} do
-      expect(MockCalendarServiceBehaviour, :get_google_calendar_list, fn (user_id, google_auth) ->
+      expect(MockCalendarServiceBehaviour, :get_google_calendar_list, fn (_user_id, _google_auth) ->
         %GoogleApi.Calendar.V3.Model.CalendarList{
           etag: "\"p32calm5dtv4eo0g\"",
           items:

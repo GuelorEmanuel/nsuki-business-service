@@ -31,7 +31,7 @@ defmodule NsukiBusinessServiceWeb.AuthControllerTest do
   end
 
   test "creates user from Google information", %{conn: conn} do
-    conn = conn
+    conn
     |> assign(:ueberauth_auth, @ueberauth_auth)
     |> get("/api/v1/auth/google/callback")
 

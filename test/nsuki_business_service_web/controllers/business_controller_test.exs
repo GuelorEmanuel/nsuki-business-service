@@ -27,7 +27,7 @@ defmodule NsukiBusinessServiceWeb.BusinessControllerTest do
     business
   end
 
-  setup %{conn: conn} do
+  setup %{conn: _conn} do
     {:ok, user} = Accounts.create_user(@create_user)
     {:ok, jwt, _claims} = Guardian.encode_and_sign(user)
 
