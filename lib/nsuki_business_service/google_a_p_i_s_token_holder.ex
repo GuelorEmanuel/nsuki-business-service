@@ -48,7 +48,7 @@ defmodule NsukiBusinessService.GoogleAPISTokenHolder do
 
 
     %{status_code: 200, body: body} =
-      resp = HTTPoison.post!(@endpoint, payload)
+      _resp = HTTPoison.post!(@endpoint, payload)
       # Successfully fetched access token
 
     body = Jason.decode!(body, keys: :atoms)
