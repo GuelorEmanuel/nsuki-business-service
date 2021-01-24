@@ -3,37 +3,35 @@ defmodule NsukiBusinessServiceWeb.ServiceControllerTest do
 
   alias NsukiBusinessService.Services
   alias NsukiBusinessService.Services.Service
-  alias NsukiBusinessService.Accounts
   alias NsukiBusinessService.Guardian
-
+  alias NsukiBusinessService.Accounts
 
   @create_attrs %{
     description: "some description",
-    duration: ~T[14:00:00],
+    duration: "2010-04-17T14:00:00Z",
     name: "some name"
   }
+  @update_attrs %{
+    description: "some updated description",
+    duration: "2011-05-18T15:01:01Z",
+    name: "some updated name"
+  }
+  @invalid_attrs %{description: nil, duration: nil, name: nil}
 
-  @create_user %{
+  @create_user_attrs %{
     first_name: "some first_name",
     last_name: "some last_name",
     verified: true,
     image: "some image"
   }
 
-  @update_attrs %{
-    description: "some updated description",
-    duration: ~T[15:01:01],
-    name: "some updated name"
-  }
-  @invalid_attrs %{description: nil, duration: nil, name: nil}
-
   def fixture(:service) do
     {:ok, service} = Services.create_service(@create_attrs)
     service
   end
 
-  setup do
-    {:ok, user} = Accounts.create_user(@create_user)
+  setup %{conn: conn} do
+    {:ok, user} = Accounts.create_user(@create_user_attrs)
     {:ok, jwt, _claims} = Guardian.encode_and_sign(user)
 
     conn =
@@ -61,7 +59,7 @@ defmodule NsukiBusinessServiceWeb.ServiceControllerTest do
       assert %{
                "id" => id,
                "description" => "some description",
-               "duration" => "14:00:00",
+               "duration" => "2010-04-17T14:00:00Z",
                "name" => "some name"
              } = json_response(conn, 200)["data"]
     end
@@ -84,7 +82,7 @@ defmodule NsukiBusinessServiceWeb.ServiceControllerTest do
       assert %{
                "id" => id,
                "description" => "some updated description",
-               "duration" => "15:01:01",
+               "duration" => "2011-05-18T15:01:01Z",
                "name" => "some updated name"
              } = json_response(conn, 200)["data"]
     end

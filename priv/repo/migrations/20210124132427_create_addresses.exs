@@ -7,13 +7,13 @@ defmodule NsukiBusinessService.Repo.Migrations.CreateAddresses do
       add :apt_no, :string
       add :province_state, :string
       add :postal_code, :string
-      add :businesses_id, references(:businesses, on_delete: :nothing)
+      add :business_id, references(:businesses, on_delete: :nothing)
       add :country_id, references(:countries, on_delete: :nothing)
 
       timestamps()
     end
 
-    create index(:addresses, [:businesses_id])
+    create index(:addresses, [:business_id])
     create index(:addresses, [:country_id])
   end
 end

@@ -8,6 +8,5 @@ defmodule NsukiBusinessService.Repo.Migrations.CreateDeposits do
       timestamps()
     end
 
-    create unique_index(:deposits, [:type])
   end
 end

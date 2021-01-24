@@ -1,14 +1,11 @@
 defmodule NsukiBusinessService.Businesses.Business do
   use Ecto.Schema
-
-  @timestamps_opts [type: :utc_datetime]
-
   import Ecto.Changeset
 
   schema "businesses" do
     field :phone_number, :string
     field :title, :string
-    field :country_code_id, :id
+    field :user_id, :id
 
     timestamps()
   end

@@ -64,6 +64,131 @@ defmodule NsukiBusinessService.BusinessesTest do
     end
   end
 
+
+  describe "calendars" do
+    alias NsukiBusinessService.Businesses.Calendar
+
+    @valid_attrs %{google_id: "some google_id", summary: "some summary", time_zone: "some time_zone"}
+    @update_attrs %{google_id: "some updated google_id", summary: "some updated summary", time_zone: "some updated time_zone"}
+    @invalid_attrs %{google_id: nil, summary: nil, time_zone: nil}
+
+    def calendar_fixture(attrs \\ %{}) do
+      {:ok, calendar} =
+        attrs
+        |> Enum.into(@valid_attrs)
+        |> Businesses.create_calendar()
+
+      calendar
+    end
+
+    test "list_calendars/0 returns all calendars" do
+      calendar = calendar_fixture()
+      assert Businesses.list_calendars() == [calendar]
+    end
+
+    test "get_calendar!/1 returns the calendar with given id" do
+      calendar = calendar_fixture()
+      assert Businesses.get_calendar!(calendar.id) == calendar
+    end
+
+    test "create_calendar/1 with valid data creates a calendar" do
+      assert {:ok, %Calendar{} = calendar} = Businesses.create_calendar(@valid_attrs)
+      assert calendar.google_id == "some google_id"
+      assert calendar.summary == "some summary"
+      assert calendar.time_zone == "some time_zone"
+    end
+
+    test "create_calendar/1 with invalid data returns error changeset" do
+      assert {:error, %Ecto.Changeset{}} = Businesses.create_calendar(@invalid_attrs)
+    end
+
+    test "update_calendar/2 with valid data updates the calendar" do
+      calendar = calendar_fixture()
+      assert {:ok, %Calendar{} = calendar} = Businesses.update_calendar(calendar, @update_attrs)
+      assert calendar.google_id == "some updated google_id"
+      assert calendar.summary == "some updated summary"
+      assert calendar.time_zone == "some updated time_zone"
+    end
+
+    test "update_calendar/2 with invalid data returns error changeset" do
+      calendar = calendar_fixture()
+      assert {:error, %Ecto.Changeset{}} = Businesses.update_calendar(calendar, @invalid_attrs)
+      assert calendar == Businesses.get_calendar!(calendar.id)
+    end
+
+    test "delete_calendar/1 deletes the calendar" do
+      calendar = calendar_fixture()
+      assert {:ok, %Calendar{}} = Businesses.delete_calendar(calendar)
+      assert_raise Ecto.NoResultsError, fn -> Businesses.get_calendar!(calendar.id) end
+    end
+
+    test "change_calendar/1 returns a calendar changeset" do
+      calendar = calendar_fixture()
+      assert %Ecto.Changeset{} = Businesses.change_calendar(calendar)
+    end
+  end
+
+
+  describe "countries" do
+    alias NsukiBusinessService.Businesses.Country
+
+    @valid_attrs %{name: "some name"}
+    @update_attrs %{name: "some updated name"}
+    @invalid_attrs %{name: nil}
+
+    def country_fixture(attrs \\ %{}) do
+      {:ok, country} =
+        attrs
+        |> Enum.into(@valid_attrs)
+        |> Businesses.create_country()
+
+      country
+    end
+
+    test "list_countries/0 returns all countries" do
+      country = country_fixture()
+      assert Businesses.list_countries() == [country]
+    end
+
+    test "get_country!/1 returns the country with given id" do
+      country = country_fixture()
+      assert Businesses.get_country!(country.id) == country
+    end
+
+    test "create_country/1 with valid data creates a country" do
+      assert {:ok, %Country{} = country} = Businesses.create_country(@valid_attrs)
+      assert country.name == "some name"
+    end
+
+    test "create_country/1 with invalid data returns error changeset" do
+      assert {:error, %Ecto.Changeset{}} = Businesses.create_country(@invalid_attrs)
+    end
+
+    test "update_country/2 with valid data updates the country" do
+      country = country_fixture()
+      assert {:ok, %Country{} = country} = Businesses.update_country(country, @update_attrs)
+      assert country.name == "some updated name"
+    end
+
+    test "update_country/2 with invalid data returns error changeset" do
+      country = country_fixture()
+      assert {:error, %Ecto.Changeset{}} = Businesses.update_country(country, @invalid_attrs)
+      assert country == Businesses.get_country!(country.id)
+    end
+
+    test "delete_country/1 deletes the country" do
+      country = country_fixture()
+      assert {:ok, %Country{}} = Businesses.delete_country(country)
+      assert_raise Ecto.NoResultsError, fn -> Businesses.get_country!(country.id) end
+    end
+
+    test "change_country/1 returns a country changeset" do
+      country = country_fixture()
+      assert %Ecto.Changeset{} = Businesses.change_country(country)
+    end
+  end
+
+
   describe "addresses" do
     alias NsukiBusinessService.Businesses.Address
 

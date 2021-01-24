@@ -3,90 +3,6 @@ defmodule NsukiBusinessService.ServicesTest do
 
   alias NsukiBusinessService.Services
 
-  describe "servicelocations" do
-    alias NsukiBusinessService.Services.ServiceLocation
-
-    @valid_attrs %{location: "some location"}
-    @update_attrs %{location: "some updated location"}
-    @invalid_attrs %{location: nil}
-
-    defp unload_relations(obj, to_remove \\ nil) do
-      assocs =
-        if to_remove == nil,
-          do: obj.__struct__.__schema__(:associations),
-        else: Enum.filter(obj.__struct__.__schema__(:associations), &(&1 in to_remove))
-
-        Enum.reduce(assocs, obj, fn assoc, obj ->
-          assoc_meta = obj.__struct__.__schema__(:association, assoc)
-
-          Map.put(obj, assoc, %Ecto.Association.NotLoaded{
-            __field__: assoc,
-            __owner__: assoc_meta.owner,
-            __cardinality__: assoc_meta.cardinality
-          })
-        end)
-    end
-
-    def service_location_fixture(attrs \\ %{}) do
-      {:ok, service_location} =
-        attrs
-        |> Enum.into(@valid_attrs)
-        |> Services.create_service_location()
-
-      service_location
-    end
-
-    test "list_servicelocations/0 returns all servicelocations" do
-      service_location = service_location_fixture()
-      service_loc_temp =
-        Services.list_servicelocations()
-        |> Enum.map(&unload_relations/1)
-
-      assert service_loc_temp == [service_location]
-    end
-
-    test "get_service_location!/1 returns the service_location with given id" do
-      service_location = service_location_fixture()
-      service_loc_temp =
-        Services.get_service_location!(service_location.id)
-        |> unload_relations()
-
-      assert service_loc_temp == service_location
-    end
-
-    test "create_service_location/1 with valid data creates a service_location" do
-      assert {:ok, %ServiceLocation{} = service_location} = Services.create_service_location(@valid_attrs)
-      assert service_location.location == "some location"
-    end
-
-    test "create_service_location/1 with invalid data returns error changeset" do
-      assert {:error, %Ecto.Changeset{}} = Services.create_service_location(@invalid_attrs)
-    end
-
-    test "update_service_location/2 with valid data updates the service_location" do
-      service_location = service_location_fixture()
-      assert {:ok, %ServiceLocation{} = service_location} = Services.update_service_location(service_location, @update_attrs)
-      assert service_location.location == "some updated location"
-    end
-
-    test "update_service_location/2 with invalid data returns error changeset" do
-      service_location = service_location_fixture()
-      assert {:error, %Ecto.Changeset{}} = Services.update_service_location(service_location, @invalid_attrs)
-      assert service_location == Services.get_service_location!(service_location.id)
-    end
-
-    test "delete_service_location/1 deletes the service_location" do
-      service_location = service_location_fixture()
-      assert {:ok, %ServiceLocation{}} = Services.delete_service_location(service_location)
-      assert_raise Ecto.NoResultsError, fn -> Services.get_service_location!(service_location.id) end
-    end
-
-    test "change_service_location/1 returns a service_location changeset" do
-      service_location = service_location_fixture()
-      assert %Ecto.Changeset{} = Services.change_service_location(service_location)
-    end
-  end
-
   describe "deposits" do
     alias NsukiBusinessService.Services.Deposit
 
@@ -105,11 +21,7 @@ defmodule NsukiBusinessService.ServicesTest do
 
     test "list_deposits/0 returns all deposits" do
       deposit = deposit_fixture()
-      deposit_temp =
-        Services.list_deposits()
-        |> Enum.map(&unload_relations/1)
-
-      assert deposit_temp == [deposit]
+      assert Services.list_deposits() == [deposit]
     end
 
     test "get_deposit!/1 returns the deposit with given id" do
@@ -150,74 +62,70 @@ defmodule NsukiBusinessService.ServicesTest do
     end
   end
 
-  describe "prices" do
-    alias NsukiBusinessService.Services.Price
+  describe "service_locations" do
+    alias NsukiBusinessService.Services.ServiceLocation
 
-    @valid_attrs %{base_price: 42, deposit_amount: 42, travelling_fee: 42}
-    @update_attrs %{base_price: 43, deposit_amount: 43, travelling_fee: 43}
-    @invalid_attrs %{base_price: nil, deposit_amount: nil, travelling_fee: nil}
+    @valid_attrs %{location: "some location"}
+    @update_attrs %{location: "some updated location"}
+    @invalid_attrs %{location: nil}
 
-    def price_fixture(attrs \\ %{}) do
-      {:ok, price} =
+    def service_location_fixture(attrs \\ %{}) do
+      {:ok, service_location} =
         attrs
         |> Enum.into(@valid_attrs)
-        |> Services.create_price()
+        |> Services.create_service_location()
 
-      price
+      service_location
     end
 
-    test "list_prices/0 returns all prices" do
-      price = price_fixture()
-      assert Services.list_prices() == [price]
+    test "list_service_locations/0 returns all service_locations" do
+      service_location = service_location_fixture()
+      assert Services.list_service_locations() == [service_location]
     end
 
-    test "get_price!/1 returns the price with given id" do
-      price = price_fixture()
-      assert Services.get_price!(price.id) == price
+    test "get_service_location!/1 returns the service_location with given id" do
+      service_location = service_location_fixture()
+      assert Services.get_service_location!(service_location.id) == service_location
     end
 
-    test "create_price/1 with valid data creates a price" do
-      assert {:ok, %Price{} = price} = Services.create_price(@valid_attrs)
-      assert price.base_price == 42
-      assert price.deposit_amount == 42
-      assert price.travelling_fee == 42
+    test "create_service_location/1 with valid data creates a service_location" do
+      assert {:ok, %ServiceLocation{} = service_location} = Services.create_service_location(@valid_attrs)
+      assert service_location.location == "some location"
     end
 
-    test "create_price/1 with invalid data returns error changeset" do
-      assert {:error, %Ecto.Changeset{}} = Services.create_price(@invalid_attrs)
+    test "create_service_location/1 with invalid data returns error changeset" do
+      assert {:error, %Ecto.Changeset{}} = Services.create_service_location(@invalid_attrs)
     end
 
-    test "update_price/2 with valid data updates the price" do
-      price = price_fixture()
-      assert {:ok, %Price{} = price} = Services.update_price(price, @update_attrs)
-      assert price.base_price == 43
-      assert price.deposit_amount == 43
-      assert price.travelling_fee == 43
+    test "update_service_location/2 with valid data updates the service_location" do
+      service_location = service_location_fixture()
+      assert {:ok, %ServiceLocation{} = service_location} = Services.update_service_location(service_location, @update_attrs)
+      assert service_location.location == "some updated location"
     end
 
-    test "update_price/2 with invalid data returns error changeset" do
-      price = price_fixture()
-      assert {:error, %Ecto.Changeset{}} = Services.update_price(price, @invalid_attrs)
-      assert price == Services.get_price!(price.id)
+    test "update_service_location/2 with invalid data returns error changeset" do
+      service_location = service_location_fixture()
+      assert {:error, %Ecto.Changeset{}} = Services.update_service_location(service_location, @invalid_attrs)
+      assert service_location == Services.get_service_location!(service_location.id)
     end
 
-    test "delete_price/1 deletes the price" do
-      price = price_fixture()
-      assert {:ok, %Price{}} = Services.delete_price(price)
-      assert_raise Ecto.NoResultsError, fn -> Services.get_price!(price.id) end
+    test "delete_service_location/1 deletes the service_location" do
+      service_location = service_location_fixture()
+      assert {:ok, %ServiceLocation{}} = Services.delete_service_location(service_location)
+      assert_raise Ecto.NoResultsError, fn -> Services.get_service_location!(service_location.id) end
     end
 
-    test "change_price/1 returns a price changeset" do
-      price = price_fixture()
-      assert %Ecto.Changeset{} = Services.change_price(price)
+    test "change_service_location/1 returns a service_location changeset" do
+      service_location = service_location_fixture()
+      assert %Ecto.Changeset{} = Services.change_service_location(service_location)
     end
   end
 
   describe "services" do
     alias NsukiBusinessService.Services.Service
 
-    @valid_attrs %{description: "some description", duration: ~T[14:00:00], name: "some name"}
-    @update_attrs %{description: "some updated description", duration: ~T[15:01:01], name: "some updated name"}
+    @valid_attrs %{description: "some description", duration: "2010-04-17T14:00:00Z", name: "some name"}
+    @update_attrs %{description: "some updated description", duration: "2011-05-18T15:01:01Z", name: "some updated name"}
     @invalid_attrs %{description: nil, duration: nil, name: nil}
 
     def service_fixture(attrs \\ %{}) do
@@ -242,7 +150,7 @@ defmodule NsukiBusinessService.ServicesTest do
     test "create_service/1 with valid data creates a service" do
       assert {:ok, %Service{} = service} = Services.create_service(@valid_attrs)
       assert service.description == "some description"
-      assert service.duration == ~T[14:00:00]
+      assert service.duration == DateTime.from_naive!(~N[2010-04-17T14:00:00Z], "Etc/UTC")
       assert service.name == "some name"
     end
 
@@ -254,7 +162,7 @@ defmodule NsukiBusinessService.ServicesTest do
       service = service_fixture()
       assert {:ok, %Service{} = service} = Services.update_service(service, @update_attrs)
       assert service.description == "some updated description"
-      assert service.duration == ~T[15:01:01]
+      assert service.duration == DateTime.from_naive!(~N[2011-05-18T15:01:01Z], "Etc/UTC")
       assert service.name == "some updated name"
     end
 

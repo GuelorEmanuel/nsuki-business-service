@@ -1,18 +1,12 @@
 defmodule NsukiBusinessService.Services.Service do
   use Ecto.Schema
-
-  @timestamps_opts [type: :utc_datetime]
-
   import Ecto.Changeset
-
-  alias NsukiBusinessService.Accounts.ServiceLocation
 
   schema "services" do
     field :description, :string
-    field :duration, :time
+    field :duration, :utc_datetime
     field :name, :string
-    field :prices_id, :id
-    belongs_to :service_location, ServiceLocation
+    field :service_location_id, :id
 
     timestamps()
   end

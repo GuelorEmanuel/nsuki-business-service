@@ -7,7 +7,7 @@ defmodule NsukiBusinessService.Businesses.Address do
     field :postal_code, :string
     field :province_state, :string
     field :street_no, :string
-    field :businesses_id, :id
+    field :business_id, :id
     field :country_id, :id
 
     timestamps()
