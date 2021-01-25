@@ -183,4 +183,67 @@ defmodule NsukiBusinessService.ServicesTest do
       assert %Ecto.Changeset{} = Services.change_service(service)
     end
   end
+
+  describe "prices" do
+    alias NsukiBusinessService.Services.Price
+
+    @valid_attrs %{base_price: 42, deposit: 42, travelling_fee: 42}
+    @update_attrs %{base_price: 43, deposit: 43, travelling_fee: 43}
+    @invalid_attrs %{base_price: nil, deposit: nil, travelling_fee: nil}
+
+    def price_fixture(attrs \\ %{}) do
+      {:ok, price} =
+        attrs
+        |> Enum.into(@valid_attrs)
+        |> Services.create_price()
+
+      price
+    end
+
+    test "list_prices/0 returns all prices" do
+      price = price_fixture()
+      assert Services.list_prices() == [price]
+    end
+
+    test "get_price!/1 returns the price with given id" do
+      price = price_fixture()
+      assert Services.get_price!(price.id) == price
+    end
+
+    test "create_price/1 with valid data creates a price" do
+      assert {:ok, %Price{} = price} = Services.create_price(@valid_attrs)
+      assert price.base_price == 42
+      assert price.deposit == 42
+      assert price.travelling_fee == 42
+    end
+
+    test "create_price/1 with invalid data returns error changeset" do
+      assert {:error, %Ecto.Changeset{}} = Services.create_price(@invalid_attrs)
+    end
+
+    test "update_price/2 with valid data updates the price" do
+      price = price_fixture()
+      assert {:ok, %Price{} = price} = Services.update_price(price, @update_attrs)
+      assert price.base_price == 43
+      assert price.deposit == 43
+      assert price.travelling_fee == 43
+    end
+
+    test "update_price/2 with invalid data returns error changeset" do
+      price = price_fixture()
+      assert {:error, %Ecto.Changeset{}} = Services.update_price(price, @invalid_attrs)
+      assert price == Services.get_price!(price.id)
+    end
+
+    test "delete_price/1 deletes the price" do
+      price = price_fixture()
+      assert {:ok, %Price{}} = Services.delete_price(price)
+      assert_raise Ecto.NoResultsError, fn -> Services.get_price!(price.id) end
+    end
+
+    test "change_price/1 returns a price changeset" do
+      price = price_fixture()
+      assert %Ecto.Changeset{} = Services.change_price(price)
+    end
+  end
 end
