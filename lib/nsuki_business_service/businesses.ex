@@ -7,6 +7,8 @@ defmodule NsukiBusinessService.Businesses do
   alias NsukiBusinessService.Repo
 
   alias NsukiBusinessService.Businesses.CountryCode
+  alias NsukiBusinessService.Services
+  alias NsukiBusinessService.Accounts
 
   @doc """
   Returns the list of country_code.
@@ -53,6 +55,12 @@ defmodule NsukiBusinessService.Businesses do
     %CountryCode{}
     |> CountryCode.changeset(attrs)
     |> Repo.insert()
+  end
+
+  def create_country_code!(attrs \\ %{}) do
+    %CountryCode{}
+    |> CountryCode.changeset(attrs)
+    |> Repo.insert!()
   end
 
   @doc """
@@ -134,6 +142,16 @@ defmodule NsukiBusinessService.Businesses do
   """
   def get_business!(id), do: Repo.get!(Business, id)
 
+  def get_business_by_user(user) do
+    query =
+      from b in Business,
+      inner_join: u in assoc(b, :user),
+      where: u.id == ^user.id
+
+    query
+    |> Repo.one()
+  end
+
   @doc """
   Creates a business.
 
@@ -146,10 +164,40 @@ defmodule NsukiBusinessService.Businesses do
       {:error, %Ecto.Changeset{}}
 
   """
-  def create_business(attrs \\ %{}) do
+  def create_business(attrs \\ %{}, user) do
     %Business{}
     |> Business.changeset(attrs)
+    |> Ecto.Changeset.put_assoc(:user, user)
     |> Repo.insert()
+  end
+
+  def create_business!(attrs \\ %{}, user) do
+    business =
+      %Business{}
+      |> Business.changeset(attrs)
+      |> Ecto.Changeset.put_assoc(:user, user)
+       |> Repo.insert!()
+
+    {:ok, business}
+  end
+
+  def create_business_on_boarding(attrs \\ %{}, user) do
+    Repo.transaction(fn ->
+      with {:ok, business} <- create_business!(attrs["business"], user),
+           {:ok, _calendar} <- create_calendar!(attrs["calendar"], business),
+           {:ok, country} <- get_country_by_name!(attrs["country"].name),
+           {:ok, _address} <- create_address(attrs["address"], business, country),
+           {:ok, service_location} <- Services.get_service_location_by_name!(attrs["service_location"]),
+           {:ok, service} <- Services.create_service!(attrs["service"], business, service_location),
+           {:ok, deposit} <- Services.get_deposit_by_name!(attrs["deposit_type"]),
+           {:ok, _price} <- Services.create_price!(attrs["price"], service, deposit),
+           {:ok, _user} <- Accounts.update_user!(user, %{verified: true})
+      do
+        business
+      else
+        {:error, _value} -> IO.puts("Create business onboarding failed")
+      end
+    end)
   end
 
   @doc """
@@ -243,10 +291,21 @@ defmodule NsukiBusinessService.Businesses do
       {:error, %Ecto.Changeset{}}
 
   """
-  def create_calendar(attrs \\ %{}) do
+  def create_calendar(attrs \\ %{}, business) do
     %Calendar{}
     |> Calendar.changeset(attrs)
+    |> Ecto.Changeset.put_assoc(:business, business)
     |> Repo.insert()
+  end
+
+  def create_calendar!(attrs \\ %{}, business) do
+    calendar =
+      %Calendar{}
+      |> Calendar.changeset(attrs)
+      |> Ecto.Changeset.put_assoc(:business, business)
+      |> Repo.insert!()
+
+      {:ok, calendar}
   end
 
   @doc """
@@ -328,6 +387,21 @@ defmodule NsukiBusinessService.Businesses do
   """
   def get_country!(id), do: Repo.get!(Country, id)
 
+  def get_country_by_name!(name) do
+    name = String.upcase(name)
+
+    query =
+      from c in Country,
+      where: c.name == ^name
+
+    query_result =
+      query
+      |> Repo.one!()
+      |> Repo.preload(:country_code)
+
+    {:ok, query_result}
+  end
+
   @doc """
   Creates a country.
 
@@ -340,10 +414,18 @@ defmodule NsukiBusinessService.Businesses do
       {:error, %Ecto.Changeset{}}
 
   """
-  def create_country(attrs \\ %{}) do
+  def create_country(attrs \\ %{}, country_code) do
     %Country{}
     |> Country.changeset(attrs)
+    |> Ecto.Changeset.put_assoc(:country_code, country_code)
     |> Repo.insert()
+  end
+
+  def create_country!(attrs \\ %{}, country_code) do
+    %Country{}
+    |> Country.changeset(attrs)
+    |> Ecto.Changeset.put_assoc(:country_code, country_code)
+    |> Repo.insert!()
   end
 
   @doc """
@@ -437,10 +519,23 @@ defmodule NsukiBusinessService.Businesses do
       {:error, %Ecto.Changeset{}}
 
   """
-  def create_address(attrs \\ %{}) do
+  def create_address(attrs \\ %{}, business, country) do
     %Address{}
     |> Address.changeset(attrs)
+    |> Ecto.Changeset.put_assoc(:business, business)
+    |> Ecto.Changeset.put_assoc(:country, country)
     |> Repo.insert()
+  end
+
+  def create_address!(attrs \\ %{}, business, country) do
+    address=
+      %Address{}
+      |> Address.changeset(attrs)
+      |> Ecto.Changeset.put_assoc(:business, business)
+      |> Ecto.Changeset.put_assoc(:country, country)
+      |> Repo.insert!()
+
+    {:ok, address}
   end
 
   @doc """

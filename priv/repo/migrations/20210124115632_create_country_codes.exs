@@ -7,6 +7,6 @@ defmodule NsukiBusinessService.Repo.Migrations.CreateCountryCode do
 
       timestamps()
     end
-
+    create unique_index(:country_codes, [:code])
   end
 end

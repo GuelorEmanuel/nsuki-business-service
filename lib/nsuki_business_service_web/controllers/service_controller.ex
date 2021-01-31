@@ -11,14 +11,14 @@ defmodule NsukiBusinessServiceWeb.ServiceController do
     render(conn, "index.json", services: services)
   end
 
-  def create(conn, %{"service" => service_params}) do
-    with {:ok, %Service{} = service} <- Services.create_service(service_params) do
-      conn
-      |> put_status(:created)
-      |> put_resp_header("location", Routes.service_path(conn, :show, service))
-      |> render("show.json", service: service)
-    end
-  end
+  # def create(conn, %{"service" => service_params}) do
+  #   with {:ok, %Service{} = service} <- Services.create_service(service_params) do
+  #     conn
+  #     |> put_status(:created)
+  #     |> put_resp_header("location", Routes.service_path(conn, :show, service))
+  #     |> render("show.json", service: service)
+  #   end
+  # end
 
   def show(conn, %{"id" => id}) do
     service = Services.get_service!(id)

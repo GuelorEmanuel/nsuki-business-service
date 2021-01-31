@@ -1,12 +1,17 @@
 defmodule NsukiBusinessService.Businesses.Calendar do
   use Ecto.Schema
+
+  @timestamps_opts [type: :utc_datetime]
+
   import Ecto.Changeset
+
+  alias NsukiBusinessService.Businesses.Business
 
   schema "calendars" do
     field :google_id, :string
     field :summary, :string
     field :time_zone, :string
-    field :business_id, :id
+    belongs_to :business, Business
 
     timestamps()
   end

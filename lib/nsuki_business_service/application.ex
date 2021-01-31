@@ -22,7 +22,8 @@ defmodule NsukiBusinessService.Application do
         ttl_check_interval: 2_000,
         global_ttl: 2_000,
         touch_on_read: true
-      ]}
+      ]},
+      Cldr.Currency
     ]
 
     # See https://hexdocs.pm/elixir/Supervisor.html

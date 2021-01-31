@@ -3,9 +3,9 @@ defmodule NsukiBusinessService.Repo.Migrations.CreatePrices do
 
   def change do
     create table(:prices) do
-      add :travelling_fee, :integer
-      add :base_price, :integer
-      add :deposit, :integer
+      add :travelling_fee, :decimal
+      add :base_price, :decimal
+      add :deposit_price, :decimal
       add :deposit_id, references(:deposits, on_delete: :nothing)
       add :service_id, references(:services, on_delete: :nothing)
 

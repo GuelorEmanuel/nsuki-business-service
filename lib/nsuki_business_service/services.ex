@@ -37,6 +37,20 @@ defmodule NsukiBusinessService.Services do
   """
   def get_deposit!(id), do: Repo.get!(Deposit, id)
 
+  def get_deposit_by_name!(name) do
+    name = String.upcase(name)
+
+    query =
+      from d in Deposit,
+      where: d.type == ^name
+
+    query_result =
+      query
+      |> Repo.one!()
+
+    {:ok, query_result}
+  end
+
   @doc """
   Creates a deposit.
 
@@ -53,6 +67,12 @@ defmodule NsukiBusinessService.Services do
     %Deposit{}
     |> Deposit.changeset(attrs)
     |> Repo.insert()
+  end
+
+  def create_deposit!(attrs \\ %{}) do
+    %Deposit{}
+    |> Deposit.changeset(attrs)
+    |> Repo.insert!()
   end
 
   @doc """
@@ -133,6 +153,21 @@ defmodule NsukiBusinessService.Services do
   """
   def get_service_location!(id), do: Repo.get!(ServiceLocation, id)
 
+  @spec get_service_location_by_name!(binary) ::
+          {:ok, nil | [%{optional(atom) => any}] | %{optional(atom) => any}}
+  def get_service_location_by_name!(name) do
+    name = String.upcase(name)
+    query =
+      from s in ServiceLocation,
+      where: s.location == ^name
+
+    query_result =
+      query
+      |> Repo.one!()
+
+    {:ok, query_result}
+  end
+
   @doc """
   Creates a service_location.
 
@@ -149,6 +184,12 @@ defmodule NsukiBusinessService.Services do
     %ServiceLocation{}
     |> ServiceLocation.changeset(attrs)
     |> Repo.insert()
+  end
+
+  def create_service_location!(attrs \\ %{}) do
+    %ServiceLocation{}
+    |> ServiceLocation.changeset(attrs)
+    |> Repo.insert!()
   end
 
   @doc """
@@ -241,10 +282,23 @@ defmodule NsukiBusinessService.Services do
       {:error, %Ecto.Changeset{}}
 
   """
-  def create_service(attrs \\ %{}) do
+  def create_service(attrs \\ %{}, business, service_location) do
     %Service{}
     |> Service.changeset(attrs)
+    |> Ecto.Changeset.put_assoc(:business, business)
+    |> Ecto.Changeset.put_assoc(:service_location, service_location)
     |> Repo.insert()
+  end
+
+  def create_service!(attrs \\ %{}, business, service_location) do
+    service =
+      %Service{}
+      |> Service.changeset(attrs)
+      |> Ecto.Changeset.put_assoc(:business, business)
+      |> Ecto.Changeset.put_assoc(:service_location, service_location)
+      |> Repo.insert!()
+
+    {:ok, service}
   end
 
   @doc """
@@ -337,10 +391,23 @@ defmodule NsukiBusinessService.Services do
       {:error, %Ecto.Changeset{}}
 
   """
-  def create_price(attrs \\ %{}) do
+  def create_price(attrs \\ %{}, service, deposit) do
     %Price{}
     |> Price.changeset(attrs)
+    |> Ecto.Changeset.put_assoc(:service, service)
+    |> Ecto.Changeset.put_assoc(:deposit, deposit)
     |> Repo.insert()
+  end
+
+  def create_price!(attrs \\ %{}, service, deposit) do
+    price =
+      %Price{}
+      |> Price.changeset(attrs)
+      |> Ecto.Changeset.put_assoc(:service, service)
+      |> Ecto.Changeset.put_assoc(:deposit, deposit)
+      |> Repo.insert!()
+
+    {:ok, price}
   end
 
   @doc """

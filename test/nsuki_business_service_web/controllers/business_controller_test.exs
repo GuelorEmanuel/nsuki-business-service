@@ -67,40 +67,40 @@ defmodule NsukiBusinessServiceWeb.BusinessControllerTest do
     end
   end
 
-  describe "update business" do
-    setup [:create_business]
+  # describe "update business" do
+  #   setup [:create_business]
 
-    test "renders business when data is valid", %{conn: conn, business: %Business{id: id} = business} do
-      conn = put(conn, Routes.business_path(conn, :update, business), business: @update_attrs)
-      assert %{"id" => ^id} = json_response(conn, 200)["data"]
+  #   test "renders business when data is valid", %{conn: conn, business: %Business{id: id} = business} do
+  #     conn = put(conn, Routes.business_path(conn, :update, business), business: @update_attrs)
+  #     assert %{"id" => ^id} = json_response(conn, 200)["data"]
 
-      conn = get(conn, Routes.business_path(conn, :show, id))
+  #     conn = get(conn, Routes.business_path(conn, :show, id))
 
-      assert %{
-               "id" => id,
-               "title" => "some updated title",
-               "phone_number" => "some updated phone_number"
-             } = json_response(conn, 200)["data"]
-    end
+  #     assert %{
+  #              "id" => id,
+  #              "title" => "some updated title",
+  #              "phone_number" => "some updated phone_number"
+  #            } = json_response(conn, 200)["data"]
+  #   end
 
-    test "renders errors when data is invalid", %{conn: conn, business: business} do
-      conn = put(conn, Routes.business_path(conn, :update, business), business: @invalid_attrs)
-      assert json_response(conn, 422)["errors"] != %{}
-    end
-  end
+  #   test "renders errors when data is invalid", %{conn: conn, business: business} do
+  #     conn = put(conn, Routes.business_path(conn, :update, business), business: @invalid_attrs)
+  #     assert json_response(conn, 422)["errors"] != %{}
+  #   end
+  # end
 
-  describe "delete service" do
-    setup [:create_business]
+  # describe "delete service" do
+  #   setup [:create_business]
 
-    test "deletes chosen service", %{conn: conn, business: business} do
-      conn = delete(conn, Routes.business_path(conn, :delete, business))
-      assert response(conn, 204)
+  #   test "deletes chosen service", %{conn: conn, business: business} do
+  #     conn = delete(conn, Routes.business_path(conn, :delete, business))
+  #     assert response(conn, 204)
 
-      assert_error_sent 404, fn ->
-        get(conn, Routes.business_path(conn, :show, business))
-      end
-    end
-  end
+  #     assert_error_sent 404, fn ->
+  #       get(conn, Routes.business_path(conn, :show, business))
+  #     end
+  #   end
+  # end
 
   defp create_business(_) do
     business = fixture(:business)

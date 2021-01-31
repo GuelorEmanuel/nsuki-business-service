@@ -20,4 +20,11 @@ defmodule NsukiBusinessServiceWeb.FallbackController do
     |> put_view(NsukiBusinessServiceWeb.ErrorView)
     |> render(:"422")
   end
+
+  def call(conn, {:error, :internal_server_error}) do
+    conn
+    |> put_status(:not_found)
+    |> put_view(NsukiBusinessServiceWeb.ErrorView)
+    |> render(:"500")
+  end
 end

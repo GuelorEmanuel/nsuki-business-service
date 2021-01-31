@@ -39,7 +39,7 @@ defmodule NsukiBusinessService.MixProject do
       {:ecto_sql, "~> 3.1"},
       {:postgrex, ">= 0.0.0"},
       {:gettext, "~> 0.11"},
-      {:jason, "~> 1.0"},
+      {:jason, "~> 1.2"},
       {:plug_cowboy, "~> 2.0"},
       {:distillery, "~> 2.1"},
       {:phoenix_live_dashboard, "~> 0.1"},
@@ -52,6 +52,7 @@ defmodule NsukiBusinessService.MixProject do
       {:google_api_calendar, "~> 0.17"},
       {:httpoison, "~> 1.7"},
       {:hammox, "~> 0.2.5"},
+      {:ex_money, "~> 5.4"},
     ]
   end
 

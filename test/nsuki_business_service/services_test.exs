@@ -3,6 +3,23 @@ defmodule NsukiBusinessService.ServicesTest do
 
   alias NsukiBusinessService.Services
 
+  defp unload_relations(obj, to_remove \\ nil) do
+    assocs =
+      if to_remove == nil,
+        do: obj.__struct__.__schema__(:associations),
+      else: Enum.filter(obj.__struct__.__schema__(:associations), &(&1 in to_remove))
+
+      Enum.reduce(assocs, obj, fn assoc, obj ->
+        assoc_meta = obj.__struct__.__schema__(:association, assoc)
+
+        Map.put(obj, assoc, %Ecto.Association.NotLoaded{
+          __field__: assoc,
+          __owner__: assoc_meta.owner,
+          __cardinality__: assoc_meta.cardinality
+        })
+      end)
+  end
+
   describe "deposits" do
     alias NsukiBusinessService.Services.Deposit
 
@@ -123,63 +140,114 @@ defmodule NsukiBusinessService.ServicesTest do
 
   describe "services" do
     alias NsukiBusinessService.Services.Service
+    alias NsukiBusinessService.Businesses
+    alias NsukiBusinessService.Accounts
 
     @valid_attrs %{description: "some description", duration: "2010-04-17T14:00:00Z", name: "some name"}
     @update_attrs %{description: "some updated description", duration: "2011-05-18T15:01:01Z", name: "some updated name"}
     @invalid_attrs %{description: nil, duration: nil, name: nil}
 
+    @valid_user_attrs %{first_name: "some first_name", last_name: "some last_name", verified: true, image: "some image"}
+    @valid_business_attrs %{phone_number: "some phone_number", title: "some title"}
+
+    def business_fixture(attrs \\ %{}) do
+      {:ok, user} =
+        @valid_user_attrs
+        |> Accounts.create_user()
+
+      {:ok, business} =
+        attrs
+        |> Enum.into(@valid_business_attrs)
+        |> Businesses.create_business(user)
+
+      business
+    end
+
     def service_fixture(attrs \\ %{}) do
+      business = business_fixture()
+      service_location = service_location_fixture()
+
       {:ok, service} =
         attrs
         |> Enum.into(@valid_attrs)
-        |> Services.create_service()
+        |> Services.create_service(business, service_location)
 
       service
     end
 
     test "list_services/0 returns all services" do
-      service = service_fixture()
+      service =
+        service_fixture()
+        |> unload_relations()
+
       assert Services.list_services() == [service]
     end
 
     test "get_service!/1 returns the service with given id" do
-      service = service_fixture()
+      service =
+        service_fixture()
+        |> unload_relations()
+
       assert Services.get_service!(service.id) == service
     end
 
     test "create_service/1 with valid data creates a service" do
-      assert {:ok, %Service{} = service} = Services.create_service(@valid_attrs)
+      business =
+        business_fixture()
+        |> unload_relations()
+
+      service_location = service_location_fixture()
+
+      assert {:ok, %Service{} = service} = Services.create_service(@valid_attrs, business, service_location)
       assert service.description == "some description"
-      assert service.duration == DateTime.from_naive!(~N[2010-04-17T14:00:00Z], "Etc/UTC")
+      assert service.duration == "2010-04-17T14:00:00Z"
       assert service.name == "some name"
     end
 
     test "create_service/1 with invalid data returns error changeset" do
-      assert {:error, %Ecto.Changeset{}} = Services.create_service(@invalid_attrs)
+      business =
+        business_fixture()
+        |> unload_relations()
+
+      service_location = service_location_fixture()
+
+      assert {:error, %Ecto.Changeset{}} = Services.create_service(@invalid_attrs, business, service_location)
     end
 
     test "update_service/2 with valid data updates the service" do
-      service = service_fixture()
+      service =
+        service_fixture()
+        |> unload_relations()
+
       assert {:ok, %Service{} = service} = Services.update_service(service, @update_attrs)
       assert service.description == "some updated description"
-      assert service.duration == DateTime.from_naive!(~N[2011-05-18T15:01:01Z], "Etc/UTC")
+      assert service.duration == "2011-05-18T15:01:01Z"
       assert service.name == "some updated name"
     end
 
     test "update_service/2 with invalid data returns error changeset" do
-      service = service_fixture()
+      service =
+        service_fixture()
+        |> unload_relations()
+
       assert {:error, %Ecto.Changeset{}} = Services.update_service(service, @invalid_attrs)
       assert service == Services.get_service!(service.id)
     end
 
     test "delete_service/1 deletes the service" do
-      service = service_fixture()
+      service =
+        service_fixture()
+        |> unload_relations()
+
       assert {:ok, %Service{}} = Services.delete_service(service)
       assert_raise Ecto.NoResultsError, fn -> Services.get_service!(service.id) end
     end
 
     test "change_service/1 returns a service changeset" do
-      service = service_fixture()
+      service =
+        service_fixture()
+        |> unload_relations()
+
       assert %Ecto.Changeset{} = Services.change_service(service)
     end
   end
@@ -187,50 +255,72 @@ defmodule NsukiBusinessService.ServicesTest do
   describe "prices" do
     alias NsukiBusinessService.Services.Price
 
-    @valid_attrs %{base_price: 42, deposit: 42, travelling_fee: 42}
-    @update_attrs %{base_price: 43, deposit: 43, travelling_fee: 43}
-    @invalid_attrs %{base_price: nil, deposit: nil, travelling_fee: nil}
+    @valid_attrs %{base_price: "42.89", deposit_price: "42.89", travelling_fee: "42.89"}
+    @update_attrs %{base_price: "43", deposit_price: "43", travelling_fee: "43"}
+    @invalid_attrs %{base_price: nil, deposit_price: nil, travelling_fee: nil}
 
     def price_fixture(attrs \\ %{}) do
+      service = service_fixture()
+      deposit = deposit_fixture()
+
       {:ok, price} =
         attrs
         |> Enum.into(@valid_attrs)
-        |> Services.create_price()
+        |> Services.create_price(service, deposit)
 
       price
     end
 
     test "list_prices/0 returns all prices" do
-      price = price_fixture()
+      price =
+        price_fixture()
+        |> unload_relations()
+
       assert Services.list_prices() == [price]
     end
 
     test "get_price!/1 returns the price with given id" do
-      price = price_fixture()
+      price =
+        price_fixture()
+        |> unload_relations()
+
       assert Services.get_price!(price.id) == price
     end
 
     test "create_price/1 with valid data creates a price" do
-      assert {:ok, %Price{} = price} = Services.create_price(@valid_attrs)
-      assert price.base_price == 42
-      assert price.deposit == 42
-      assert price.travelling_fee == 42
+      service = service_fixture()
+      deposit = deposit_fixture()
+
+      assert {:ok, %Price{} = price} = Services.create_price(@valid_attrs, service, deposit)
+      answeer =  Decimal.new("42.89")
+
+      assert price.base_price == answeer
+      assert price.deposit_price == answeer
+      assert price.travelling_fee == answeer
     end
 
     test "create_price/1 with invalid data returns error changeset" do
-      assert {:error, %Ecto.Changeset{}} = Services.create_price(@invalid_attrs)
+      service = service_fixture()
+      deposit = deposit_fixture()
+
+      assert {:error, %Ecto.Changeset{}} = Services.create_price(@invalid_attrs, service, deposit)
     end
 
     test "update_price/2 with valid data updates the price" do
       price = price_fixture()
       assert {:ok, %Price{} = price} = Services.update_price(price, @update_attrs)
-      assert price.base_price == 43
-      assert price.deposit == 43
-      assert price.travelling_fee == 43
+      answeer =  Decimal.new("43")
+
+      assert price.base_price == answeer
+      assert price.deposit_price == answeer
+      assert price.travelling_fee == answeer
     end
 
     test "update_price/2 with invalid data returns error changeset" do
-      price = price_fixture()
+      price =
+        price_fixture()
+        |> unload_relations()
+
       assert {:error, %Ecto.Changeset{}} = Services.update_price(price, @invalid_attrs)
       assert price == Services.get_price!(price.id)
     end
