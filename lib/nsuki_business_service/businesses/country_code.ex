@@ -7,9 +7,9 @@ defmodule NsukiBusinessService.Businesses.CountryCode do
 
   alias NsukiBusinessService.Businesses.Country
 
-  schema "countrycodes" do
+  schema "country_codes" do
     field :code, :integer
-    belongs_to :country, Country
+    has_many :country, Country
 
     timestamps()
   end

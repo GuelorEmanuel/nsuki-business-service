@@ -9,45 +9,65 @@
 #
 # We recommend using the bang functions (`insert!`, `update!`
 # and so on) as they will fail if something goes wrong.
-alias NsukiBusinessService.Services.{Deposit, ServiceLocation}
-alias NsukiBusinessService.Businesses.{Country}
 
-no_deposit =
-  %Deposit{type: "No Deposit"}
-  |> NsukiBusinessService.Repo.insert!()
+alias NsukiBusinessService.Businesses
+alias NsukiBusinessService.Services
 
-fixed =
-  %Deposit{type: "Fixed"}
-  |> NsukiBusinessService.Repo.insert!()
 
-percentage =
-  %Deposit{type: "Percentage"}
-  |> NsukiBusinessService.Repo.insert!()
+# CountryCodes
+ca_us =
+  %{code: 1}
+  |> Businesses.create_country_code!()
 
-business_location =
-  %ServiceLocation{location: "Business Location"}
-  |> NsukiBusinessService.Repo.insert!()
+fr =
+  %{code: 33}
+  |> Businesses.create_country_code!()
 
-client_location =
-  %ServiceLocation{location: "Client Location"}
-  |> NsukiBusinessService.Repo.insert!()
+pt =
+  %{code: 351}
+  |> Businesses.create_country_code!()
 
-canada =
-  %Country{name: "Canada"}
-  |> NsukiBusinessService.Repo.insert!()
+nl =
+  %{code: 31}
+  |> Businesses.create_country_code!()
 
-united_states =
-  %Country{name: "United States"}
-  |> NsukiBusinessService.Repo.insert!()
+# Country
+_canada =
+  %{name: "CA"}
+  |> Businesses.create_country!(ca_us)
 
-france =
-  %Country{name: "France"}
-  |> NsukiBusinessService.Repo.insert!()
+_united_states =
+  %{name: "US"}
+  |> Businesses.create_country!(fr)
 
-portugal =
-  %Country{name: "Portugal"}
-  |> NsukiBusinessService.Repo.insert!()
+_portugal =
+  %{name: "PT"}
+  |> Businesses.create_country!(pt)
 
-netherlands =
-  %Country{name: "Netherlands"}
-  |> NsukiBusinessService.Repo.insert!()
+_netherlands =
+  %{name: "NL"}
+  |> Businesses.create_country!(nl)
+
+
+# Deposit
+_none =
+  %{type: "NONE"}
+  |> Services.create_deposit!()
+
+_fixed =
+  %{type: "FIXED"}
+  |> Services.create_deposit!()
+
+_percentage =
+  %{type: "PERCENTAGE"}
+  |> Services.create_deposit!()
+
+
+# ServiceLocation
+_atBusiness =
+  %{location: "ATBUSINESS"}
+  |> Services.create_service_location!()
+
+_atClientLocation =
+  %{location: "ATCLIENTLOCATION"}
+  |> Services.create_service_location!()

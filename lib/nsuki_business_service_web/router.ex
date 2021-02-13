@@ -30,9 +30,10 @@ defmodule NsukiBusinessServiceWeb.Router do
     pipe_through [:api, :jwt_authenticated]
 
     resources "/users", UserController, except: [:new, :edit, :index, :create]
-    resources "/services", ServiceController
-    resources "/business", BusinessController
     resources "/calendar", CalendarController, except: [:new, :edit, :create]
+    resources "/services", ServiceController, except: [:create]
+    resources "/businesses", BusinessController
+    post "/businesses/on_boarding", BusinessController, :on_boarding
     post "/logout", AuthController, :delete
   end
 

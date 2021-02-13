@@ -5,12 +5,13 @@ defmodule NsukiBusinessService.Services.Price do
 
   import Ecto.Changeset
 
-  alias NsukiBusinessService.Services.Deposit
+  alias NsukiBusinessService.Services.{Service, Deposit}
 
   schema "prices" do
-    field :base_price, :integer
-    field :deposit_amount, :integer
-    field :travelling_fee, :integer
+    field :base_price, :decimal
+    field :deposit_price, :decimal
+    field :travelling_fee, :decimal
+    belongs_to :service, Service
     belongs_to :deposit, Deposit
 
     timestamps()
@@ -19,7 +20,7 @@ defmodule NsukiBusinessService.Services.Price do
   @doc false
   def changeset(price, attrs) do
     price
-    |> cast(attrs, [:travelling_fee, :base_price, :deposit_amount])
-    |> validate_required([:travelling_fee, :base_price, :deposit_amount])
+    |> cast(attrs, [:travelling_fee, :base_price, :deposit_price])
+    |> validate_required([:travelling_fee, :base_price, :deposit_price])
   end
 end

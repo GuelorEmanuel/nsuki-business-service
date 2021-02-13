@@ -5,11 +5,11 @@ defmodule NsukiBusinessService.Repo.Migrations.CreateBusinesses do
     create table(:businesses) do
       add :title, :string
       add :phone_number, :string
-      add :country_code_id, references(:countrycodes, on_delete: :nothing)
+      add :user_id, references(:users, on_delete: :nothing)
 
       timestamps()
     end
 
-    create index(:businesses, [:country_code_id])
+    create index(:businesses, [:user_id])
   end
 end

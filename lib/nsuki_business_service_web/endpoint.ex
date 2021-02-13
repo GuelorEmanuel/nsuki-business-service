@@ -1,6 +1,6 @@
 defmodule NsukiBusinessServiceWeb.Endpoint do
   use Phoenix.Endpoint, otp_app: :nsuki_business_service
-  
+
   socket "/live", Phoenix.LiveView.Socket
 
   # The session will be stored in the cookie and signed,
@@ -43,5 +43,6 @@ defmodule NsukiBusinessServiceWeb.Endpoint do
   plug Plug.MethodOverride
   plug Plug.Head
   plug Plug.Session, @session_options
+  plug CORSPlug
   plug NsukiBusinessServiceWeb.Router
 end

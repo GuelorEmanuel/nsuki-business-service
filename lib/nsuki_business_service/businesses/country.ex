@@ -5,11 +5,12 @@ defmodule NsukiBusinessService.Businesses.Country do
 
   import Ecto.Changeset
 
-  alias NsukiBusinessService.Businesses.CountryCode
+  alias NsukiBusinessService.Businesses.{Address, CountryCode}
 
   schema "countries" do
     field :name, :string
-    has_one :country_code, CountryCode
+    has_many :address, Address
+    belongs_to :country_code, CountryCode
 
     timestamps()
   end

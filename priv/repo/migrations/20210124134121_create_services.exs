@@ -4,15 +4,14 @@ defmodule NsukiBusinessService.Repo.Migrations.CreateServices do
   def change do
     create table(:services) do
       add :name, :string
-      add :duration, :time
+      add :duration, :string
       add :description, :string
-      add :prices_id, references(:prices, on_delete: :delete_all)
-      add :service_location_id, references(:servicelocations, on_delete: :delete_all)
+      add :service_location_id, references(:service_locations, on_delete: :nothing)
+      add :business_id, references(:businesses, on_delete: :nothing)
 
       timestamps()
     end
 
-    create index(:services, [:prices_id])
     create index(:services, [:service_location_id])
   end
 end

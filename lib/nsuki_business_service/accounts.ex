@@ -85,6 +85,15 @@ defmodule NsukiBusinessService.Accounts do
     |> Repo.update()
   end
 
+  def update_user!(%User{} = user, attrs) do
+    temp_user =
+      user
+      |> User.changeset(attrs)
+      |> Repo.update!()
+
+    {:ok, temp_user}
+  end
+
   @doc """
   Deletes a user.
 
